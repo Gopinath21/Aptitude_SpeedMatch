@@ -1,0 +1,2521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Calculation Master Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        nav {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        nav button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        nav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        nav button.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .technique-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .technique-card:hover {
+            transform: scale(1.02);
+        }
+
+        .technique-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .technique-icon {
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .example {
+            background: white;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .example-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .calculation-steps {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+
+        .step {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .step:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .result {
+            background: #d4edda;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .practice-section {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .practice-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #d63031;
+            margin-bottom: 15px;
+        }
+
+        .practice-problem {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .problem-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .answer-input {
+            padding: 8px 15px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            font-size: 1em;
+            width: 120px;
+        }
+
+        .check-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: #218838;
+        }
+
+        .feedback {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        .tip-box {
+            background: #e7f3ff;
+            border-left: 5px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .tip-box strong {
+            color: #2196F3;
+        }
+
+        .visual-demo {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .number-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            gap: 10px;
+        }
+
+        .number-box {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: bold;
+            min-width: 60px;
+        }
+
+        .operator {
+            font-size: 2em;
+            color: #764ba2;
+            font-weight: bold;
+        }
+
+        .arrow {
+            font-size: 1.5em;
+            color: #28a745;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .speed-tip {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .interactive-calculator {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .calc-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .calc-result {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            min-height: 60px;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav button {
+                width: 100%;
+            }
+
+            .practice-problem {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ Speed Calculation Master Tutorial</h1>
+            <p>Learn lightning-fast mental math techniques for all operations</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><button onclick="showSection('intro')" class="active">Introduction</button></li>
+                <li><button onclick="showSection('addition')">Addition</button></li>
+                <li><button onclick="showSection('subtraction')">Subtraction</button></li>
+                <li><button onclick="showSection('multiplication')">Multiplication</button></li>
+                <li><button onclick="showSection('division')">Division</button></li>
+                <li><button onclick="showSection('advanced')">Advanced Tricks</button></li>
+                <li><button onclick="showSection('percentages')">Percentages</button></li>
+                <li><button onclick="showSection('fractions')">Fractions</button></li>
+                <li><button onclick="showSection('squares')">Squares & Roots</button></li>
+                <li><button onclick="showSection('practice')">Practice Zone</button></li>
+                <li><button onclick="showSection('games')">Speed Games</button></li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <!-- INTRODUCTION SECTION -->
+            <section id="intro" class="section active">
+                <h2>Welcome to Speed Calculation Mastery! 🚀</h2>
+                
+                <p style="font-size: 1.1em; margin: 20px 0;">
+                    Mental math isn't magic—it's about using smart techniques that work with how your brain naturally processes numbers. This tutorial will teach you proven methods used by math champions and mental calculators worldwide.
+                </p>
+
+                <div class="technique-card">
+                    <h3>Why Learn Speed Calculation?</h3>
+                    <ul style="margin-left: 20px;">
+                        <li>✅ Faster problem-solving in everyday life</li>
+                        <li>✅ Improved confidence with numbers</li>
+                        <li>✅ Better performance in exams and interviews</li>
+                        <li>✅ Enhanced brain function and memory</li>
+                        <li>✅ Impress friends and colleagues!</li>
+                    </ul>
+                </div>
+
+                <div class="tip-box">
+                    <strong>💡 Pro Tip:</strong> The key to speed is not memorizing more—it's learning to break problems into easier chunks your brain can handle quickly!
+                </div>
+
+                <h3>The Golden Rules of Speed Calculation</h3>
+                
+                <table>
+                    <tr>
+                        <th>Rule</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1. Work Left to Right</strong></td>
+                        <td>Start with the biggest digits first (opposite of traditional method)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Make Friends with 10</strong></td>
+                        <td>Round to 10s, 100s, or 1000s and adjust afterward</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Break It Down</strong></td>
+                        <td>Split complex problems into simple steps</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Look for Patterns</strong></td>
+                        <td>Numbers ending in 5, 0, doubles, etc. have special tricks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5. Estimate First</strong></td>
+                        <td>Always know roughly what answer to expect</td>
+                    </tr>
+                </table>
+
+                <div class="speed-tip">
+                    <strong>🎯 Getting Started:</strong> Click on any operation above (Addition, Subtraction, Multiplication, Division) to learn specific techniques, or jump to the Practice Zone to test your skills!
+                </div>
+            </section>
+
+            <!-- ADDITION SECTION -->
+            <section id="addition" class="section">
+                <h2>⚡ Lightning-Fast Addition</h2>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">1</div>
+                        Make 10s (Friendly Numbers)
+                    </div>
+                    <p>Break numbers to create groups of 10, which your brain processes instantly.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example 1: 47 + 8</div>
+                        <div class="calculation-steps">
+                            <div class="step">Think: "I need 3 more to make 50"</div>
+                            <div class="step">47 + 3 = 50</div>
+                            <div class="step">8 - 3 = 5 remaining</div>
+                            <div class="step">50 + 5 = 55</div>
+                        </div>
+                        <div class="result">Answer: 55</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 2: 68 + 27</div>
+                        <div class="calculation-steps">
+                            <div class="step">68 + 2 = 70 (making a friendly 10)</div>
+                            <div class="step">27 - 2 = 25 remaining</div>
+                            <div class="step">70 + 25 = 95</div>
+                        </div>
+                        <div class="result">Answer: 95</div>
+                    </div>
+
+                    <div class="visual-demo">
+                        <h4>Visual Breakdown:</h4>
+                        <div class="number-line">
+                            <div class="number-box">47</div>
+                            <span class="operator">+</span>
+                            <div class="number-box" style="background: #28a745;">3</div>
+                            <span class="arrow">→</span>
+                            <div class="number-box">50</div>
+                            <span class="operator">+</span>
+                            <div class="number-box" style="background: #28a745;">5</div>
+                            <span class="arrow">=</span>
+                            <div class="number-box" style="background: #d63031;">55</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">2</div>
+                        Left-to-Right Addition
+                    </div>
+                    <p>Add the biggest place values first. This keeps running totals in your head easier.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 357 + 428</div>
+                        <div class="calculation-steps">
+                            <div class="step">Hundreds: 300 + 400 = 700</div>
+                            <div class="step">Tens: 50 + 20 = 70</div>
+                            <div class="step">Ones: 7 + 8 = 15</div>
+                            <div class="step">Total: 700 + 70 + 15 = 785</div>
+                        </div>
+                        <div class="result">Answer: 785</div>
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>💡 Why This Works:</strong> Your brain finds it easier to keep track of one number (700 → 770 → 785) rather than carrying digits right-to-left.
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">3</div>
+                        Compensation Method
+                    </div>
+                    <p>Round one number to make it easier, then compensate.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example 1: 486 + 297</div>
+                        <div class="calculation-steps">
+                            <div class="step">Round 297 up to 300 (easier!)</div>
+                            <div class="step">486 + 300 = 786</div>
+                            <div class="step">We added 3 too many, so subtract: 786 - 3 = 783</div>
+                        </div>
+                        <div class="result">Answer: 783</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 2: 652 + 199</div>
+                        <div class="calculation-steps">
+                            <div class="step">Round 199 up to 200</div>
+                            <div class="step">652 + 200 = 852</div>
+                            <div class="step">Subtract the extra 1: 852 - 1 = 851</div>
+                        </div>
+                        <div class="result">Answer: 851</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">4</div>
+                        Doubles Strategy
+                    </div>
+                    <p>When adding near-doubles, use the double and adjust.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 48 + 47</div>
+                        <div class="calculation-steps">
+                            <div class="step">These are almost doubles!</div>
+                            <div class="step">Double 47: 47 × 2 = 94</div>
+                            <div class="step">48 is one more than 47, so: 94 + 1 = 95</div>
+                        </div>
+                        <div class="result">Answer: 95</div>
+                    </div>
+                </div>
+
+                <div class="speed-tip">
+                    <strong>🎯 Speed Practice:</strong> Try adding these in under 5 seconds each: 67 + 8 | 234 + 189 | 567 + 398 | 88 + 87
+                </div>
+
+                <div class="practice-section">
+                    <div class="practice-title">🏋️ Quick Drills - Addition</div>
+                    <div class="practice-problem">
+                        <span class="problem-text">73 + 9 = </span>
+                        <input type="number" class="answer-input" id="add1">
+                        <button class="check-btn" onclick="checkAnswer('add1', 82)">Check</button>
+                        <div class="feedback" id="add1-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">456 + 298 = </span>
+                        <input type="number" class="answer-input" id="add2">
+                        <button class="check-btn" onclick="checkAnswer('add2', 754)">Check</button>
+                        <div class="feedback" id="add2-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">678 + 543 = </span>
+                        <input type="number" class="answer-input" id="add3">
+                        <button class="check-btn" onclick="checkAnswer('add3', 1221)">Check</button>
+                        <div class="feedback" id="add3-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SUBTRACTION SECTION -->
+            <section id="subtraction" class="section">
+                <h2>⚡ Super-Fast Subtraction</h2>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">1</div>
+                        Add-Up Method (Counting Forward)
+                    </div>
+                    <p>Instead of subtracting backward, count up from the smaller to larger number.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 83 - 47</div>
+                        <div class="calculation-steps">
+                            <div class="step">Start at 47, count up to 83</div>
+                            <div class="step">47 + 3 = 50 (counted 3)</div>
+                            <div class="step">50 + 30 = 80 (counted 30 more)</div>
+                            <div class="step">80 + 3 = 83 (counted 3 more)</div>
+                            <div class="step">Total counted: 3 + 30 + 3 = 36</div>
+                        </div>
+                        <div class="result">Answer: 36</div>
+                    </div>
+
+                    <div class="visual-demo">
+                        <h4>Counting Up Visualization:</h4>
+                        <div class="number-line">
+                            <div class="number-box">47</div>
+                            <span class="operator">+3</span>
+                            <div class="number-box">50</div>
+                            <span class="operator">+30</span>
+                            <div class="number-box">80</div>
+                            <span class="operator">+3</span>
+                            <div class="number-box">83</div>
+                        </div>
+                        <p style="margin-top: 15px;">Total jumps: 3 + 30 + 3 = <span class="highlight">36</span></p>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">2</div>
+                        Constant Difference Method
+                    </div>
+                    <p>Add or subtract the same amount from both numbers to make calculation easier.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example 1: 634 - 297</div>
+                        <div class="calculation-steps">
+                            <div class="step">297 is close to 300 (easy to work with!)</div>
+                            <div class="step">Add 3 to both numbers: 634 + 3 = 637, 297 + 3 = 300</div>
+                            <div class="step">Now calculate: 637 - 300 = 337</div>
+                        </div>
+                        <div class="result">Answer: 337</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 2: 1000 - 348</div>
+                        <div class="calculation-steps">
+                            <div class="step">Add 2 to both: 1002 - 350</div>
+                            <div class="step">1002 - 350 = 652</div>
+                        </div>
+                        <div class="result">Answer: 652</div>
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>💡 Key Insight:</strong> The difference between two numbers stays the same if you add or subtract the same amount from both!
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">3</div>
+                        Break Apart (Chunking) Method
+                    </div>
+                    <p>Subtract in easy chunks: hundreds, then tens, then ones.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 542 - 178</div>
+                        <div class="calculation-steps">
+                            <div class="step">Start: 542</div>
+                            <div class="step">Subtract 100: 542 - 100 = 442</div>
+                            <div class="step">Subtract 70: 442 - 70 = 372</div>
+                            <div class="step">Subtract 8: 372 - 8 = 364</div>
+                        </div>
+                        <div class="result">Answer: 364</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">4</div>
+                        Compensation for Subtraction
+                    </div>
+                    <p>Round the subtracted number up, then add back the extra.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 534 - 198</div>
+                        <div class="calculation-steps">
+                            <div class="step">Round 198 to 200 (much easier!)</div>
+                            <div class="step">534 - 200 = 334</div>
+                            <div class="step">We subtracted 2 too many, so add back: 334 + 2 = 336</div>
+                        </div>
+                        <div class="result">Answer: 336</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">5</div>
+                        Subtract from Left to Right
+                    </div>
+                    <p>Just like addition, work with largest digits first.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 856 - 423</div>
+                        <div class="calculation-steps">
+                            <div class="step">Hundreds: 800 - 400 = 400</div>
+                            <div class="step">Tens: 50 - 20 = 30</div>
+                            <div class="step">Ones: 6 - 3 = 3</div>
+                            <div class="step">Total: 400 + 30 + 3 = 433</div>
+                        </div>
+                        <div class="result">Answer: 433</div>
+                    </div>
+                </div>
+
+                <div class="speed-tip">
+                    <strong>🎯 Speed Challenge:</strong> Try these: 91 - 48 | 456 - 289 | 1000 - 347 | 732 - 198
+                </div>
+
+                <div class="practice-section">
+                    <div class="practice-title">🏋️ Quick Drills - Subtraction</div>
+                    <div class="practice-problem">
+                        <span class="problem-text">82 - 37 = </span>
+                        <input type="number" class="answer-input" id="sub1">
+                        <button class="check-btn" onclick="checkAnswer('sub1', 45)">Check</button>
+                        <div class="feedback" id="sub1-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">500 - 234 = </span>
+                        <input type="number" class="answer-input" id="sub2">
+                        <button class="check-btn" onclick="checkAnswer('sub2', 266)">Check</button>
+                        <div class="feedback" id="sub2-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">823 - 397 = </span>
+                        <input type="number" class="answer-input" id="sub3">
+                        <button class="check-btn" onclick="checkAnswer('sub3', 426)">Check</button>
+                        <div class="feedback" id="sub3-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MULTIPLICATION SECTION -->
+            <section id="multiplication" class="section">
+                <h2>⚡ Rapid-Fire Multiplication</h2>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">1</div>
+                        Doubling and Halving
+                    </div>
+                    <p>If one number is even, you can halve it and double the other.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example 1: 16 × 25</div>
+                        <div class="calculation-steps">
+                            <div class="step">16 is even, so halve it: 16 ÷ 2 = 8</div>
+                            <div class="step">Double 25: 25 × 2 = 50</div>
+                            <div class="step">Now: 8 × 50 = 400</div>
+                        </div>
+                        <div class="result">Answer: 400</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 2: 32 × 15</div>
+                        <div class="calculation-steps">
+                            <div class="step">Halve 32: 32 ÷ 2 = 16</div>
+                            <div class="step">Double 15: 15 × 2 = 30</div>
+                            <div class="step">16 × 30 = 480</div>
+                        </div>
+                        <div class="result">Answer: 480</div>
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>💡 Why It Works:</strong> a × b = (a÷2) × (b×2). You can keep doubling and halving until you get easy numbers!
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">2</div>
+                        Distributive Property (Break Apart)
+                    </div>
+                    <p>Split one number into parts, multiply each part, then add.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 23 × 7</div>
+                        <div class="calculation-steps">
+                            <div class="step">Break 23 into 20 + 3</div>
+                            <div class="step">20 × 7 = 140</div>
+                            <div class="step">3 × 7 = 21</div>
+                            <div class="step">140 + 21 = 161</div>
+                        </div>
+                        <div class="result">Answer: 161</div>
+                    </div>
+
+                    <div class="visual-demo">
+                        <h4>Visual Breakdown:</h4>
+                        <div class="number-line">
+                            <div class="number-box" style="background: #28a745;">20×7=140</div>
+                            <span class="operator">+</span>
+                            <div class="number-box" style="background: #28a745;">3×7=21</div>
+                            <span class="arrow">=</span>
+                            <div class="number-box" style="background: #d63031;">161</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">3</div>
+                        Multiply by 5 (Super Fast!)
+                    </div>
+                    <p>Multiply by 10, then divide by 2.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example 1: 48 × 5</div>
+                        <div class="calculation-steps">
+                            <div class="step">48 × 10 = 480</div>
+                            <div class="step">480 ÷ 2 = 240</div>
+                        </div>
+                        <div class="result">Answer: 240</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 2: 136 × 5</div>
+                        <div class="calculation-steps">
+                            <div class="step">136 × 10 = 1360</div>
+                            <div class="step">1360 ÷ 2 = 680</div>
+                        </div>
+                        <div class="result">Answer: 680</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">4</div>
+                        Multiply by 9 (Magic Trick!)
+                    </div>
+                    <p>Multiply by 10, then subtract the original number.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 37 × 9</div>
+                        <div class="calculation-steps">
+                            <div class="step">37 × 10 = 370</div>
+                            <div class="step">370 - 37 = 333</div>
+                        </div>
+                        <div class="result">Answer: 333</div>
+                    </div>
+
+                    <div class="speed-tip">
+                        <strong>🎯 Finger Trick for 9s (1-10):</strong> Hold up 10 fingers. To multiply 9 × 7, fold down the 7th finger. Fingers left of folded = tens (6), fingers right = ones (3). Answer: 63!
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">5</div>
+                        Multiply by 11 (Two-Digit Numbers)
+                    </div>
+                    <p>Add the digits and place the sum in the middle.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example 1: 43 × 11</div>
+                        <div class="calculation-steps">
+                            <div class="step">Split: 4 and 3</div>
+                            <div class="step">Add them: 4 + 3 = 7</div>
+                            <div class="step">Place in middle: 4 [7] 3</div>
+                        </div>
+                        <div class="result">Answer: 473</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 2: 52 × 11</div>
+                        <div class="calculation-steps">
+                            <div class="step">Split: 5 and 2</div>
+                            <div class="step">Add: 5 + 2 = 7</div>
+                            <div class="step">Answer: 5 [7] 2</div>
+                        </div>
+                        <div class="result">Answer: 572</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 3 (with carry): 67 × 11</div>
+                        <div class="calculation-steps">
+                            <div class="step">Split: 6 and 7</div>
+                            <div class="step">Add: 6 + 7 = 13</div>
+                            <div class="step">Place middle (carry the 1): 6 [13] 7 → (6+1) [3] 7</div>
+                        </div>
+                        <div class="result">Answer: 737</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">6</div>
+                        Squaring Numbers Ending in 5
+                    </div>
+                    <p>For n5²: multiply n × (n+1), then append 25.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example 1: 35²</div>
+                        <div class="calculation-steps">
+                            <div class="step">Take the tens digit: 3</div>
+                            <div class="step">Multiply by next number: 3 × 4 = 12</div>
+                            <div class="step">Append 25: 12|25</div>
+                        </div>
+                        <div class="result">Answer: 1225</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 2: 75²</div>
+                        <div class="calculation-steps">
+                            <div class="step">Tens digit: 7</div>
+                            <div class="step">7 × 8 = 56</div>
+                            <div class="step">Append 25: 56|25</div>
+                        </div>
+                        <div class="result">Answer: 5625</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 3: 105²</div>
+                        <div class="calculation-steps">
+                            <div class="step">Tens: 10</div>
+                            <div class="step">10 × 11 = 110</div>
+                            <div class="step">Append 25: 110|25</div>
+                        </div>
+                        <div class="result">Answer: 11025</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">7</div>
+                        Multiply by 25 (Lightning Fast!)
+                    </div>
+                    <p>Divide by 4, then multiply by 100.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 48 × 25</div>
+                        <div class="calculation-steps">
+                            <div class="step">48 ÷ 4 = 12</div>
+                            <div class="step">12 × 100 = 1200</div>
+                        </div>
+                        <div class="result">Answer: 1200</div>
+                    </div>
+                </div>
+
+                <div class="speed-tip">
+                    <strong>🎯 Master These Patterns:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>× 5 = (× 10) ÷ 2</li>
+                        <li>× 9 = (× 10) - original</li>
+                        <li>× 11 = add digits, place in middle</li>
+                        <li>× 25 = (÷ 4) × 100</li>
+                        <li>n5² = n(n+1)|25</li>
+                    </ul>
+                </div>
+
+                <div class="practice-section">
+                    <div class="practice-title">🏋️ Quick Drills - Multiplication</div>
+                    <div class="practice-problem">
+                        <span class="problem-text">26 × 5 = </span>
+                        <input type="number" class="answer-input" id="mul1">
+                        <button class="check-btn" onclick="checkAnswer('mul1', 130)">Check</button>
+                        <div class="feedback" id="mul1-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">42 × 11 = </span>
+                        <input type="number" class="answer-input" id="mul2">
+                        <button class="check-btn" onclick="checkAnswer('mul2', 462)">Check</button>
+                        <div class="feedback" id="mul2-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">45² = </span>
+                        <input type="number" class="answer-input" id="mul3">
+                        <button class="check-btn" onclick="checkAnswer('mul3', 2025)">Check</button>
+                        <div class="feedback" id="mul3-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIVISION SECTION -->
+            <section id="division" class="section">
+                <h2>⚡ Express Division</h2>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">1</div>
+                        Simplify First (Factor Method)
+                    </div>
+                    <p>Cancel common factors before dividing.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example 1: 450 ÷ 15</div>
+                        <div class="calculation-steps">
+                            <div class="step">Both divisible by 5: 450÷5 = 90, 15÷5 = 3</div>
+                            <div class="step">Now simpler: 90 ÷ 3 = 30</div>
+                        </div>
+                        <div class="result">Answer: 30</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 2: 720 ÷ 24</div>
+                        <div class="calculation-steps">
+                            <div class="step">Both divisible by 12: 720÷12 = 60, 24÷12 = 2</div>
+                            <div class="step">60 ÷ 2 = 30</div>
+                        </div>
+                        <div class="result">Answer: 30</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">2</div>
+                        Multiplication Thinking
+                    </div>
+                    <p>Think: "What times the divisor equals the dividend?"</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 156 ÷ 12</div>
+                        <div class="calculation-steps">
+                            <div class="step">Think: 12 × ? = 156</div>
+                            <div class="step">Try 10: 12 × 10 = 120 (need 36 more)</div>
+                            <div class="step">12 × 3 = 36</div>
+                            <div class="step">Total: 10 + 3 = 13</div>
+                        </div>
+                        <div class="result">Answer: 13</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">3</div>
+                        Divide by 5 (Super Fast!)
+                    </div>
+                    <p>Multiply by 2, then divide by 10.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example 1: 370 ÷ 5</div>
+                        <div class="calculation-steps">
+                            <div class="step">370 × 2 = 740</div>
+                            <div class="step">740 ÷ 10 = 74</div>
+                        </div>
+                        <div class="result">Answer: 74</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 2: 625 ÷ 5</div>
+                        <div class="calculation-steps">
+                            <div class="step">625 × 2 = 1250</div>
+                            <div class="step">1250 ÷ 10 = 125</div>
+                        </div>
+                        <div class="result">Answer: 125</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">4</div>
+                        Divide by 4 (Quick Method)
+                    </div>
+                    <p>Divide by 2 twice, or think of it as finding 1/4.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 144 ÷ 4</div>
+                        <div class="calculation-steps">
+                            <div class="step">144 ÷ 2 = 72</div>
+                            <div class="step">72 ÷ 2 = 36</div>
+                        </div>
+                        <div class="result">Answer: 36</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">5</div>
+                        Divide by 25 (Lightning Method)
+                    </div>
+                    <p>Multiply by 4, then divide by 100.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 1200 ÷ 25</div>
+                        <div class="calculation-steps">
+                            <div class="step">1200 × 4 = 4800</div>
+                            <div class="step">4800 ÷ 100 = 48</div>
+                        </div>
+                        <div class="result">Answer: 48</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">6</div>
+                        Break Apart Method
+                    </div>
+                    <p>Split the dividend into easier chunks.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 288 ÷ 16</div>
+                        <div class="calculation-steps">
+                            <div class="step">Break 288: 160 + 128</div>
+                            <div class="step">160 ÷ 16 = 10</div>
+                            <div class="step">128 ÷ 16 = 8</div>
+                            <div class="step">Total: 10 + 8 = 18</div>
+                        </div>
+                        <div class="result">Answer: 18</div>
+                    </div>
+                </div>
+
+                <table style="margin-top: 30px;">
+                    <tr>
+                        <th>Quick Division Tricks</th>
+                        <th>Method</th>
+                    </tr>
+                    <tr>
+                        <td>÷ 2</td>
+                        <td>Halve the number</td>
+                    </tr>
+                    <tr>
+                        <td>÷ 4</td>
+                        <td>Halve twice, or (÷ 2) ÷ 2</td>
+                    </tr>
+                    <tr>
+                        <td>÷ 5</td>
+                        <td>(× 2) ÷ 10</td>
+                    </tr>
+                    <tr>
+                        <td>÷ 8</td>
+                        <td>Halve three times</td>
+                    </tr>
+                    <tr>
+                        <td>÷ 25</td>
+                        <td>(× 4) ÷ 100</td>
+                    </tr>
+                    <tr>
+                        <td>÷ 50</td>
+                        <td>(× 2) ÷ 100</td>
+                    </tr>
+                </table>
+
+                <div class="speed-tip">
+                    <strong>🎯 Division Mastery Tips:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Always look for common factors to cancel first</li>
+                        <li>Think multiplication instead of division when possible</li>
+                        <li>Know your times tables perfectly (especially 12, 15, 16, 20, 25)</li>
+                        <li>Practice estimating first (is answer closer to 10, 100, or 1000?)</li>
+                    </ul>
+                </div>
+
+                <div class="practice-section">
+                    <div class="practice-title">🏋️ Quick Drills - Division</div>
+                    <div class="practice-problem">
+                        <span class="problem-text">420 ÷ 5 = </span>
+                        <input type="number" class="answer-input" id="div1">
+                        <button class="check-btn" onclick="checkAnswer('div1', 84)">Check</button>
+                        <div class="feedback" id="div1-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">192 ÷ 12 = </span>
+                        <input type="number" class="answer-input" id="div2">
+                        <button class="check-btn" onclick="checkAnswer('div2', 16)">Check</button>
+                        <div class="feedback" id="div2-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">800 ÷ 25 = </span>
+                        <input type="number" class="answer-input" id="div3">
+                        <button class="check-btn" onclick="checkAnswer('div3', 32)">Check</button>
+                        <div class="feedback" id="div3-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ADVANCED TRICKS SECTION -->
+            <section id="advanced" class="section">
+                <h2>🚀 Advanced Speed Tricks</h2>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">★</div>
+                        Vedic Math: Vertically and Crosswise
+                    </div>
+                    <p>Ancient technique for multiplying two-digit numbers.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 23 × 14</div>
+                        <div class="calculation-steps">
+                            <div class="step">Step 1 - Ones place: 3 × 4 = 12 (write 2, carry 1)</div>
+                            <div class="step">Step 2 - Cross multiply: (2×4) + (3×1) = 8 + 3 = 11, plus carry = 12 (write 2, carry 1)</div>
+                            <div class="step">Step 3 - Tens place: 2 × 1 = 2, plus carry = 3</div>
+                            <div class="step">Read answer: 322</div>
+                        </div>
+                        <div class="result">Answer: 322</div>
+                    </div>
+
+                    <div class="visual-demo">
+                        <h4>Visual Breakdown:</h4>
+                        <pre style="font-size: 1.2em; text-align: left;">
+    2   3
+  × 1   4
+  -------
+    │ │ │
+    │ │ └─ 3×4 = 12 (ones)
+    │ └─── (2×4)+(3×1) = 11+1 = 12 (cross)
+    └───── 2×1 + 1 = 3 (tens)
+    
+Answer: 322
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">★</div>
+                        Criss-Cross Method (Three Digits)
+                    </div>
+                    <p>Extend the method to three-digit multiplication.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 121 × 12</div>
+                        <div class="calculation-steps">
+                            <div class="step">Ones: 1 × 2 = 2</div>
+                            <div class="step">Cross 1: (2×2) + (1×1) = 4 + 1 = 5</div>
+                            <div class="step">Cross 2: (1×2) + (2×1) + (1×0) = 2 + 2 = 4</div>
+                            <div class="step">Tens: (1×1) + (2×0) = 1</div>
+                            <div class="step">Hundreds: 1 × 0 = 0, add 1 from carry = 1</div>
+                        </div>
+                        <div class="result">Answer: 1,452</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">★</div>
+                        Near 100 Multiplication
+                    </div>
+                    <p>Lightning fast for numbers close to 100.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 97 × 96</div>
+                        <div class="calculation-steps">
+                            <div class="step">97 is 3 below 100, 96 is 4 below 100</div>
+                            <div class="step">Subtract crosswise: 97 - 4 = 93 (or 96 - 3 = 93)</div>
+                            <div class="step">Multiply the differences: 3 × 4 = 12</div>
+                            <div class="step">Answer: 9312 (place 93 | 12)</div>
+                        </div>
+                        <div class="result">Answer: 9,312</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example: 103 × 104</div>
+                        <div class="calculation-steps">
+                            <div class="step">103 is 3 above 100, 104 is 4 above 100</div>
+                            <div class="step">Add crosswise: 103 + 4 = 107</div>
+                            <div class="step">Multiply the differences: 3 × 4 = 12</div>
+                            <div class="step">Answer: 10712</div>
+                        </div>
+                        <div class="result">Answer: 10,712</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">★</div>
+                        Squaring Numbers Near 50
+                    </div>
+                    <p>Special trick for numbers close to 50.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 48²</div>
+                        <div class="calculation-steps">
+                            <div class="step">48 is 2 below 50</div>
+                            <div class="step">25 - 2 = 23 (first part)</div>
+                            <div class="step">2² = 04 (second part, always 2 digits)</div>
+                            <div class="step">Answer: 2304</div>
+                        </div>
+                        <div class="result">Answer: 2,304</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example: 53²</div>
+                        <div class="calculation-steps">
+                            <div class="step">53 is 3 above 50</div>
+                            <div class="step">25 + 3 = 28 (first part)</div>
+                            <div class="step">3² = 09 (second part)</div>
+                            <div class="step">Answer: 2809</div>
+                        </div>
+                        <div class="result">Answer: 2,809</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">★</div>
+                        Difference of Squares
+                    </div>
+                    <p>Use the formula: a² - b² = (a+b)(a-b)</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 73 × 67</div>
+                        <div class="calculation-steps">
+                            <div class="step">Rewrite as difference: 70² - 3²</div>
+                            <div class="step">70² = 4900</div>
+                            <div class="step">3² = 9</div>
+                            <div class="step">4900 - 9 = 4891</div>
+                        </div>
+                        <div class="result">Answer: 4,891</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">★</div>
+                        Multiply by 99, 999, 9999
+                    </div>
+                    <p>Subtract from power of 10, then subtract original.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 47 × 99</div>
+                        <div class="calculation-steps">
+                            <div class="step">47 × 99 = 47 × (100 - 1)</div>
+                            <div class="step">= (47 × 100) - 47</div>
+                            <div class="step">= 4700 - 47 = 4653</div>
+                        </div>
+                        <div class="result">Answer: 4,653</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example: 23 × 999</div>
+                        <div class="calculation-steps">
+                            <div class="step">23 × 1000 = 23000</div>
+                            <div class="step">23000 - 23 = 22977</div>
+                        </div>
+                        <div class="result">Answer: 22,977</div>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <div class="practice-title">🏋️ Advanced Drills</div>
+                    <div class="practice-problem">
+                        <span class="problem-text">98 × 97 = </span>
+                        <input type="number" class="answer-input" id="adv-p1">
+                        <button class="check-btn" onclick="checkAnswer('adv-p1', 9506)">Check</button>
+                        <div class="feedback" id="adv-p1-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">52² = </span>
+                        <input type="number" class="answer-input" id="adv-p2">
+                        <button class="check-btn" onclick="checkAnswer('adv-p2', 2704)">Check</button>
+                        <div class="feedback" id="adv-p2-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">34 × 999 = </span>
+                        <input type="number" class="answer-input" id="adv-p3">
+                        <button class="check-btn" onclick="checkAnswer('adv-p3', 33966)">Check</button>
+                        <div class="feedback" id="adv-p3-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PERCENTAGES SECTION -->
+            <section id="percentages" class="section">
+                <h2>📊 Lightning Percentages</h2>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">%</div>
+                        Reverse Percentage Trick
+                    </div>
+                    <p>a% of b = b% of a (Mind-blowing but true!)</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 4% of 75</div>
+                        <div class="calculation-steps">
+                            <div class="step">Hard way: 75 × 0.04 = ?</div>
+                            <div class="step">Easy way: Think 75% of 4 instead!</div>
+                            <div class="step">75% of 4 = 3/4 of 4 = 3</div>
+                        </div>
+                        <div class="result">Answer: 3</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example: 16% of 25</div>
+                        <div class="calculation-steps">
+                            <div class="step">Reverse: 25% of 16</div>
+                            <div class="step">25% = 1/4</div>
+                            <div class="step">16 ÷ 4 = 4</div>
+                        </div>
+                        <div class="result">Answer: 4</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">%</div>
+                        Common Percentage Shortcuts
+                    </div>
+                    
+                    <table>
+                        <tr>
+                            <th>Percentage</th>
+                            <th>Quick Method</th>
+                            <th>Example (of 200)</th>
+                        </tr>
+                        <tr>
+                            <td>50%</td>
+                            <td>÷ 2</td>
+                            <td>200 ÷ 2 = 100</td>
+                        </tr>
+                        <tr>
+                            <td>25%</td>
+                            <td>÷ 4</td>
+                            <td>200 ÷ 4 = 50</td>
+                        </tr>
+                        <tr>
+                            <td>10%</td>
+                            <td>÷ 10 (move decimal)</td>
+                            <td>200 ÷ 10 = 20</td>
+                        </tr>
+                        <tr>
+                            <td>20%</td>
+                            <td>10% × 2</td>
+                            <td>20 × 2 = 40</td>
+                        </tr>
+                        <tr>
+                            <td>15%</td>
+                            <td>10% + 5%</td>
+                            <td>20 + 10 = 30</td>
+                        </tr>
+                        <tr>
+                            <td>5%</td>
+                            <td>10% ÷ 2</td>
+                            <td>20 ÷ 2 = 10</td>
+                        </tr>
+                        <tr>
+                            <td>1%</td>
+                            <td>÷ 100</td>
+                            <td>200 ÷ 100 = 2</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">%</div>
+                        Build Any Percentage
+                    </div>
+                    <p>Combine 10%, 5%, and 1% to make any percentage.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 23% of 400</div>
+                        <div class="calculation-steps">
+                            <div class="step">10% of 400 = 40</div>
+                            <div class="step">20% = 40 × 2 = 80</div>
+                            <div class="step">3% = 1% × 3 = 4 × 3 = 12</div>
+                            <div class="step">23% = 80 + 12 = 92</div>
+                        </div>
+                        <div class="result">Answer: 92</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">%</div>
+                        Percentage Increase/Decrease
+                    </div>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: $80 with 15% discount</div>
+                        <div class="calculation-steps">
+                            <div class="step">Method 1 - Find discount: 10% = $8, 5% = $4, total $12 off</div>
+                            <div class="step">$80 - $12 = $68</div>
+                            <div class="step">Method 2 - Find 85%: 85% of 80 = 0.85 × 80</div>
+                            <div class="step">But easier: (100% - 15%) of 80 = 85% of 80 = $68</div>
+                        </div>
+                        <div class="result">Final Price: $68</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">%</div>
+                        Quick Tip Calculations
+                    </div>
+                    
+                    <div class="example">
+                        <div class="example-title">15% tip on $42 bill</div>
+                        <div class="calculation-steps">
+                            <div class="step">10% = $4.20</div>
+                            <div class="step">5% = $2.10</div>
+                            <div class="step">15% = $6.30</div>
+                        </div>
+                        <div class="result">Tip: $6.30</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">20% tip on $67 bill</div>
+                        <div class="calculation-steps">
+                            <div class="step">10% = $6.70</div>
+                            <div class="step">20% = $6.70 × 2 = $13.40</div>
+                        </div>
+                        <div class="result">Tip: $13.40</div>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <div class="practice-title">🏋️ Percentage Drills</div>
+                    <div class="practice-problem">
+                        <span class="problem-text">8% of 50 = </span>
+                        <input type="number" class="answer-input" id="pct1">
+                        <button class="check-btn" onclick="checkAnswer('pct1', 4)">Check</button>
+                        <div class="feedback" id="pct1-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">15% of 200 = </span>
+                        <input type="number" class="answer-input" id="pct2">
+                        <button class="check-btn" onclick="checkAnswer('pct2', 30)">Check</button>
+                        <div class="feedback" id="pct2-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">25% of 88 = </span>
+                        <input type="number" class="answer-input" id="pct3">
+                        <button class="check-btn" onclick="checkAnswer('pct3', 22)">Check</button>
+                        <div class="feedback" id="pct3-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FRACTIONS SECTION -->
+            <section id="fractions" class="section">
+                <h2>🎯 Fast Fractions</h2>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">÷</div>
+                        Converting Fractions to Percentages
+                    </div>
+                    
+                    <table>
+                        <tr>
+                            <th>Fraction</th>
+                            <th>Percentage</th>
+                            <th>Decimal</th>
+                        </tr>
+                        <tr>
+                            <td>1/2</td>
+                            <td>50%</td>
+                            <td>0.5</td>
+                        </tr>
+                        <tr>
+                            <td>1/4</td>
+                            <td>25%</td>
+                            <td>0.25</td>
+                        </tr>
+                        <tr>
+                            <td>3/4</td>
+                            <td>75%</td>
+                            <td>0.75</td>
+                        </tr>
+                        <tr>
+                            <td>1/5</td>
+                            <td>20%</td>
+                            <td>0.2</td>
+                        </tr>
+                        <tr>
+                            <td>1/8</td>
+                            <td>12.5%</td>
+                            <td>0.125</td>
+                        </tr>
+                        <tr>
+                            <td>1/3</td>
+                            <td>33.33%</td>
+                            <td>0.333...</td>
+                        </tr>
+                        <tr>
+                            <td>2/3</td>
+                            <td>66.67%</td>
+                            <td>0.666...</td>
+                        </tr>
+                        <tr>
+                            <td>1/10</td>
+                            <td>10%</td>
+                            <td>0.1</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">÷</div>
+                        Quick Fraction Multiplication
+                    </div>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 3/4 of 80</div>
+                        <div class="calculation-steps">
+                            <div class="step">Method 1: (80 ÷ 4) × 3</div>
+                            <div class="step">20 × 3 = 60</div>
+                            <div class="step">Method 2: 75% of 80 = 60</div>
+                        </div>
+                        <div class="result">Answer: 60</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example: 5/8 of 96</div>
+                        <div class="calculation-steps">
+                            <div class="step">96 ÷ 8 = 12</div>
+                            <div class="step">12 × 5 = 60</div>
+                        </div>
+                        <div class="result">Answer: 60</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">÷</div>
+                        Comparing Fractions Quickly
+                    </div>
+                    <p>Cross-multiply to compare fractions.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Which is larger: 3/5 or 4/7?</div>
+                        <div class="calculation-steps">
+                            <div class="step">Cross multiply: 3 × 7 = 21</div>
+                            <div class="step">Cross multiply: 4 × 5 = 20</div>
+                            <div class="step">21 > 20, so 3/5 > 4/7</div>
+                        </div>
+                        <div class="result">3/5 is larger</div>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <div class="practice-title">🏋️ Fraction Drills</div>
+                    <div class="practice-problem">
+                        <span class="problem-text">2/5 of 75 = </span>
+                        <input type="number" class="answer-input" id="frac1">
+                        <button class="check-btn" onclick="checkAnswer('frac1', 30)">Check</button>
+                        <div class="feedback" id="frac1-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">3/8 of 120 = </span>
+                        <input type="number" class="answer-input" id="frac2">
+                        <button class="check-btn" onclick="checkAnswer('frac2', 45)">Check</button>
+                        <div class="feedback" id="frac2-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SQUARES AND ROOTS SECTION -->
+            <section id="squares" class="section">
+                <h2>🔢 Squares & Square Roots Mastery</h2>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">²</div>
+                        Essential Squares (Memorize These!)
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+                        <div class="example" style="text-align: center;">
+                            <strong>1² = 1</strong><br>
+                            <strong>2² = 4</strong><br>
+                            <strong>3² = 9</strong><br>
+                            <strong>4² = 16</strong><br>
+                            <strong>5² = 25</strong>
+                        </div>
+                        <div class="example" style="text-align: center;">
+                            <strong>6² = 36</strong><br>
+                            <strong>7² = 49</strong><br>
+                            <strong>8² = 64</strong><br>
+                            <strong>9² = 81</strong><br>
+                            <strong>10² = 100</strong>
+                        </div>
+                        <div class="example" style="text-align: center;">
+                            <strong>11² = 121</strong><br>
+                            <strong>12² = 144</strong><br>
+                            <strong>13² = 169</strong><br>
+                            <strong>14² = 196</strong><br>
+                            <strong>15² = 225</strong>
+                        </div>
+                        <div class="example" style="text-align: center;">
+                            <strong>20² = 400</strong><br>
+                            <strong>25² = 625</strong><br>
+                            <strong>30² = 900</strong><br>
+                            <strong>40² = 1600</strong><br>
+                            <strong>50² = 2500</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">²</div>
+                        Squaring Numbers Near Known Squares
+                    </div>
+                    <p>Use the formula: (n±a)² = n² ± 2na + a²</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 29²</div>
+                        <div class="calculation-steps">
+                            <div class="step">Think: 29 = 30 - 1</div>
+                            <div class="step">30² = 900 (known)</div>
+                            <div class="step">2 × 30 × 1 = 60</div>
+                            <div class="step">1² = 1</div>
+                            <div class="step">900 - 60 + 1 = 841</div>
+                        </div>
+                        <div class="result">Answer: 841</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example: 51²</div>
+                        <div class="calculation-steps">
+                            <div class="step">Think: 51 = 50 + 1</div>
+                            <div class="step">50² = 2500</div>
+                            <div class="step">2 × 50 × 1 = 100</div>
+                            <div class="step">1² = 1</div>
+                            <div class="step">2500 + 100 + 1 = 2601</div>
+                        </div>
+                        <div class="result">Answer: 2,601</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">√</div>
+                        Estimating Square Roots
+                    </div>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: √50</div>
+                        <div class="calculation-steps">
+                            <div class="step">Know that 7² = 49 and 8² = 64</div>
+                            <div class="step">50 is between 49 and 64</div>
+                            <div class="step">50 is very close to 49</div>
+                            <div class="step">Estimate: slightly more than 7</div>
+                            <div class="step">Precise: ≈ 7.07</div>
+                        </div>
+                        <div class="result">√50 ≈ 7.07</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">²</div>
+                        Squaring Two-Digit Numbers (General)
+                    </div>
+                    <p>For AB: (A×10 + B)² = A²×100 + 2AB×10 + B²</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 32²</div>
+                        <div class="calculation-steps">
+                            <div class="step">Break into: 30 + 2</div>
+                            <div class="step">30² = 900</div>
+                            <div class="step">2 × 30 × 2 = 120</div>
+                            <div class="step">2² = 4</div>
+                            <div class="step">900 + 120 + 4 = 1024</div>
+                        </div>
+                        <div class="result">Answer: 1,024</div>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <div class="practice-title">🏋️ Squares & Roots Drills</div>
+                    <div class="practice-problem">
+                        <span class="problem-text">19² = </span>
+                        <input type="number" class="answer-input" id="sq1">
+                        <button class="check-btn" onclick="checkAnswer('sq1', 361)">Check</button>
+                        <div class="feedback" id="sq1-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">95² = </span>
+                        <input type="number" class="answer-input" id="sq2">
+                        <button class="check-btn" onclick="checkAnswer('sq2', 9025)">Check</button>
+                        <div class="feedback" id="sq2-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SPEED GAMES SECTION -->
+            <section id="games" class="section">
+                <h2>🎮 Speed Calculation Games</h2>
+
+                <div class="interactive-calculator">
+                    <h3>⏱️ 60-Second Challenge</h3>
+                    <p>How many problems can you solve in 60 seconds?</p>
+                    
+                    <div id="timer-display" style="font-size: 2em; font-weight: bold; color: #667eea; margin: 20px 0;">60</div>
+                    
+                    <button class="check-btn" onclick="startTimer()" id="start-timer" style="width: 100%; padding: 15px; font-size: 1.2em;">
+                        Start Challenge!
+                    </button>
+
+                    <div id="game-problem" style="font-size: 2em; margin: 20px 0; font-weight: bold; display: none;"></div>
+                    <input type="number" class="calc-input" id="game-answer" style="display:none;" placeholder="Your answer...">
+                    <button class="check-btn" onclick="submitGameAnswer()" id="submit-game" style="width: 100%; padding: 15px; display: none;">Submit</button>
+                    
+                    <div id="score-display" style="font-size: 1.5em; margin: 20px 0; font-weight: bold;"></div>
+                    <div id="final-score" class="result" style="display: none;"></div>
+                </div>
+
+                <div class="technique-card">
+                    <h3>🏆 Achievement Badges</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div class="example" style="text-align: center;">
+                            <div style="font-size: 3em;">🥉</div>
+                            <strong>Beginner</strong>
+                            <p>5+ correct in 60 sec</p>
+                        </div>
+                        <div class="example" style="text-align: center;">
+                            <div style="font-size: 3em;">🥈</div>
+                            <strong>Intermediate</strong>
+                            <p>10+ correct in 60 sec</p>
+                        </div>
+                        <div class="example" style="text-align: center;">
+                            <div style="font-size: 3em;">🥇</div>
+                            <strong>Advanced</strong>
+                            <p>15+ correct in 60 sec</p>
+                        </div>
+                        <div class="example" style="text-align: center;">
+                            <div style="font-size: 3em;">👑</div>
+                            <strong>Master</strong>
+                            <p>20+ correct in 60 sec</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="speed-tip">
+                    <h3>📈 Progress Tracker Tips</h3>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Day 1-7:</strong> Focus on accuracy, don't worry about speed</li>
+                        <li><strong>Day 8-14:</strong> Start timing yourself, aim for consistent performance</li>
+                        <li><strong>Day 15-21:</strong> Challenge yourself with harder problems</li>
+                        <li><strong>Day 22+:</strong> Mix all operations, aim for mastery</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="division" class="section">
+                <h2>⚡ Express Division</h2>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">1</div>
+                        Simplify First (Factor Method)
+                    </div>
+                    <p>Cancel common factors before dividing.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example 1: 450 ÷ 15</div>
+                        <div class="calculation-steps">
+                            <div class="step">Both divisible by 5: 450÷5 = 90, 15÷5 = 3</div>
+                            <div class="step">Now simpler: 90 ÷ 3 = 30</div>
+                        </div>
+                        <div class="result">Answer: 30</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 2: 720 ÷ 24</div>
+                        <div class="calculation-steps">
+                            <div class="step">Both divisible by 12: 720÷12 = 60, 24÷12 = 2</div>
+                            <div class="step">60 ÷ 2 = 30</div>
+                        </div>
+                        <div class="result">Answer: 30</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">2</div>
+                        Multiplication Thinking
+                    </div>
+                    <p>Think: "What times the divisor equals the dividend?"</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 156 ÷ 12</div>
+                        <div class="calculation-steps">
+                            <div class="step">Think: 12 × ? = 156</div>
+                            <div class="step">Try 10: 12 × 10 = 120 (need 36 more)</div>
+                            <div class="step">12 × 3 = 36</div>
+                            <div class="step">Total: 10 + 3 = 13</div>
+                        </div>
+                        <div class="result">Answer: 13</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">3</div>
+                        Divide by 5 (Super Fast!)
+                    </div>
+                    <p>Multiply by 2, then divide by 10.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example 1: 370 ÷ 5</div>
+                        <div class="calculation-steps">
+                            <div class="step">370 × 2 = 740</div>
+                            <div class="step">740 ÷ 10 = 74</div>
+                        </div>
+                        <div class="result">Answer: 74</div>
+                    </div>
+
+                    <div class="example">
+                        <div class="example-title">Example 2: 625 ÷ 5</div>
+                        <div class="calculation-steps">
+                            <div class="step">625 × 2 = 1250</div>
+                            <div class="step">1250 ÷ 10 = 125</div>
+                        </div>
+                        <div class="result">Answer: 125</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">4</div>
+                        Divide by 4 (Quick Method)
+                    </div>
+                    <p>Divide by 2 twice, or think of it as finding 1/4.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 144 ÷ 4</div>
+                        <div class="calculation-steps">
+                            <div class="step">144 ÷ 2 = 72</div>
+                            <div class="step">72 ÷ 2 = 36</div>
+                        </div>
+                        <div class="result">Answer: 36</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">5</div>
+                        Divide by 25 (Lightning Method)
+                    </div>
+                    <p>Multiply by 4, then divide by 100.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 1200 ÷ 25</div>
+                        <div class="calculation-steps">
+                            <div class="step">1200 × 4 = 4800</div>
+                            <div class="step">4800 ÷ 100 = 48</div>
+                        </div>
+                        <div class="result">Answer: 48</div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-title">
+                        <div class="technique-icon">6</div>
+                        Break Apart Method
+                    </div>
+                    <p>Split the dividend into easier chunks.</p>
+                    
+                    <div class="example">
+                        <div class="example-title">Example: 288 ÷ 16</div>
+                        <div class="calculation-steps">
+                            <div class="step">Break 288: 160 + 128</div>
+                            <div class="step">160 ÷ 16 = 10</div>
+                            <div class="step">128 ÷ 16 = 8</div>
+                            <div class="step">Total: 10 + 8 = 18</div>
+                        </div>
+                        <div class="result">Answer: 18</div>
+                    </div>
+                </div>
+
+                <table style="margin-top: 30px;">
+                    <tr>
+                        <th>Quick Division Tricks</th>
+                        <th>Method</th>
+                    </tr>
+                    <tr>
+                        <td>÷ 2</td>
+                        <td>Halve the number</td>
+                    </tr>
+                    <tr>
+                        <td>÷ 4</td>
+                        <td>Halve twice, or (÷ 2) ÷ 2</td>
+                    </tr>
+                    <tr>
+                        <td>÷ 5</td>
+                        <td>(× 2) ÷ 10</td>
+                    </tr>
+                    <tr>
+                        <td>÷ 8</td>
+                        <td>Halve three times</td>
+                    </tr>
+                    <tr>
+                        <td>÷ 25</td>
+                        <td>(× 4) ÷ 100</td>
+                    </tr>
+                    <tr>
+                        <td>÷ 50</td>
+                        <td>(× 2) ÷ 100</td>
+                    </tr>
+                </table>
+
+                <div class="speed-tip">
+                    <strong>🎯 Division Mastery Tips:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Always look for common factors to cancel first</li>
+                        <li>Think multiplication instead of division when possible</li>
+                        <li>Know your times tables perfectly (especially 12, 15, 16, 20, 25)</li>
+                        <li>Practice estimating first (is answer closer to 10, 100, or 1000?)</li>
+                    </ul>
+                </div>
+
+                <div class="practice-section">
+                    <div class="practice-title">🏋️ Quick Drills - Division</div>
+                    <div class="practice-problem">
+                        <span class="problem-text">420 ÷ 5 = </span>
+                        <input type="number" class="answer-input" id="div1">
+                        <button class="check-btn" onclick="checkAnswer('div1', 84)">Check</button>
+                        <div class="feedback" id="div1-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">192 ÷ 12 = </span>
+                        <input type="number" class="answer-input" id="div2">
+                        <button class="check-btn" onclick="checkAnswer('div2', 16)">Check</button>
+                        <div class="feedback" id="div2-feedback"></div>
+                    </div>
+                    <div class="practice-problem">
+                        <span class="problem-text">800 ÷ 25 = </span>
+                        <input type="number" class="answer-input" id="div3">
+                        <button class="check-btn" onclick="checkAnswer('div3', 32)">Check</button>
+                        <div class="feedback" id="div3-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PRACTICE ZONE -->
+            <section id="practice" class="section">
+                <h2>🎯 Ultimate Practice Zone</h2>
+
+                <div class="interactive-calculator">
+                    <h3>Random Problem Generator</h3>
+                    <p>Click to get a random speed calculation problem!</p>
+                    
+                    <div style="display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
+                        <button class="check-btn" onclick="generateProblem('addition')" style="flex: 1; padding: 15px;">Addition</button>
+                        <button class="check-btn" onclick="generateProblem('subtraction')" style="flex: 1; padding: 15px; background: #17a2b8;">Subtraction</button>
+                        <button class="check-btn" onclick="generateProblem('multiplication')" style="flex: 1; padding: 15px; background: #ffc107;">Multiplication</button>
+                        <button class="check-btn" onclick="generateProblem('division')" style="flex: 1; padding: 15px; background: #dc3545;">Division</button>
+                    </div>
+
+                    <div class="calc-result" id="random-problem">Click a button above to start practicing!</div>
+                    
+                    <input type="number" class="calc-input" id="random-answer" placeholder="Your answer..." style="display:none;">
+                    <button class="check-btn" onclick="checkRandomAnswer()" id="check-random" style="width: 100%; padding: 15px; display: none;">Check Answer</button>
+                    <div class="feedback" id="random-feedback"></div>
+                </div>
+
+                <div class="technique-card">
+                    <h3>📊 Mixed Speed Drills</h3>
+                    <p>Test yourself across all operations!</p>
+
+                    <div class="practice-problem">
+                        <span class="problem-text">67 + 38 = </span>
+                        <input type="number" class="answer-input" id="mixed1">
+                        <button class="check-btn" onclick="checkAnswer('mixed1', 105)">Check</button>
+                        <div class="feedback" id="mixed1-feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <span class="problem-text">234 - 187 = </span>
+                        <input type="number" class="answer-input" id="mixed2">
+                        <button class="check-btn" onclick="checkAnswer('mixed2', 47)">Check</button>
+                        <div class="feedback" id="mixed2-feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <span class="problem-text">18 × 15 = </span>
+                        <input type="number" class="answer-input" id="mixed3">
+                        <button class="check-btn" onclick="checkAnswer('mixed3', 270)">Check</button>
+                        <div class="feedback" id="mixed3-feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <span class="problem-text">360 ÷ 15 = </span>
+                        <input type="number" class="answer-input" id="mixed4">
+                        <button class="check-btn" onclick="checkAnswer('mixed4', 24)">Check</button>
+                        <div class="feedback" id="mixed4-feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <span class="problem-text">55² = </span>
+                        <input type="number" class="answer-input" id="mixed5">
+                        <button class="check-btn" onclick="checkAnswer('mixed5', 3025)">Check</button>
+                        <div class="feedback" id="mixed5-feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <span class="problem-text">97 × 9 = </span>
+                        <input type="number" class="answer-input" id="mixed6">
+                        <button class="check-btn" onclick="checkAnswer('mixed6', 873)">Check</button>
+                        <div class="feedback" id="mixed6-feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <span class="problem-text">1000 - 678 = </span>
+                        <input type="number" class="answer-input" id="mixed7">
+                        <button class="check-btn" onclick="checkAnswer('mixed7', 322)">Check</button>
+                        <div class="feedback" id="mixed7-feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <span class="problem-text">84 × 11 = </span>
+                        <input type="number" class="answer-input" id="mixed8">
+                        <button class="check-btn" onclick="checkAnswer('mixed8', 924)">Check</button>
+                        <div class="feedback" id="mixed8-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="speed-tip">
+                    <h3>🏆 Challenge Problems (Advanced)</h3>
+                    <p>Ready for the ultimate test? Try these without writing anything down!</p>
+
+                    <div class="practice-problem">
+                        <span class="problem-text">567 + 489 = </span>
+                        <input type="number" class="answer-input" id="adv1">
+                        <button class="check-btn" onclick="checkAnswer('adv1', 1056)">Check</button>
+                        <div class="feedback" id="adv1-feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <span class="problem-text">1234 - 897 = </span>
+                        <input type="number" class="answer-input" id="adv2">
+                        <button class="check-btn" onclick="checkAnswer('adv2', 337)">Check</button>
+                        <div class="feedback" id="adv2-feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <span class="problem-text">125² = </span>
+                        <input type="number" class="answer-input" id="adv3">
+                        <button class="check-btn" onclick="checkAnswer('adv3', 15625)">Check</button>
+                        <div class="feedback" id="adv3-feedback"></div>
+                    </div>
+
+                    <div class="practice-problem">
+                        <span class="problem-text">2400 ÷ 48 = </span>
+                        <input type="number" class="answer-input" id="adv4">
+                        <button class="check-btn" onclick="checkAnswer('adv4', 50)">Check</button>
+                        <div class="feedback" id="adv4-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <strong>💪 Daily Practice Plan:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Week 1:</strong> Focus on addition & subtraction (10 mins/day)</li>
+                        <li><strong>Week 2:</strong> Master multiplication tricks (15 mins/day)</li>
+                        <li><strong>Week 3:</strong> Practice division methods (10 mins/day)</li>
+                        <li><strong>Week 4+:</strong> Mixed practice, increasing difficulty</li>
+                        <li><strong>Goal:</strong> Be able to do any basic calculation in under 5 seconds!</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>🧠 Remember: Speed comes with practice! Start slow, focus on accuracy, then build speed.</p>
+            <p>Practice 10 minutes daily and you'll see amazing improvements in just 2 weeks!</p>
+        </footer>
+    </div>
+
+    <script>
+        // Variables for random problem generator
+        let currentAnswer = null;
+
+        // Timer game variables
+        let timerInterval = null;
+        let timeRemaining = 60;
+        let score = 0;
+        let gameActive = false;
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Check answer function
+        function checkAnswer(inputId, correctAnswer) {
+            const input = document.getElementById(inputId);
+            const feedback = document.getElementById(inputId + '-feedback');
+            const userAnswer = parseInt(input.value);
+
+            if (isNaN(userAnswer)) {
+                feedback.textContent = 'Please enter a number!';
+                feedback.className = 'feedback incorrect';
+                return;
+            }
+
+            if (userAnswer === correctAnswer) {
+                feedback.textContent = '✅ Correct! Great job!';
+                feedback.className = 'feedback correct';
+                input.style.borderColor = '#28a745';
+            } else {
+                feedback.textContent = `❌ Not quite. The answer is ${correctAnswer}. Try the technique again!`;
+                feedback.className = 'feedback incorrect';
+                input.style.borderColor = '#dc3545';
+            }
+        }
+
+        // Random problem generator
+        function generateProblem(type) {
+            let num1, num2, problem, answer;
+
+            switch(type) {
+                case 'addition':
+                    num1 = Math.floor(Math.random() * 500) + 50;
+                    num2 = Math.floor(Math.random() * 500) + 50;
+                    problem = `${num1} + ${num2}`;
+                    answer = num1 + num2;
+                    break;
+                
+                case 'subtraction':
+                    num1 = Math.floor(Math.random() * 800) + 200;
+                    num2 = Math.floor(Math.random() * (num1 - 50)) + 50;
+                    problem = `${num1} - ${num2}`;
+                    answer = num1 - num2;
+                    break;
+                
+                case 'multiplication':
+                    num1 = Math.floor(Math.random() * 90) + 10;
+                    num2 = Math.floor(Math.random() * 20) + 2;
+                    problem = `${num1} × ${num2}`;
+                    answer = num1 * num2;
+                    break;
+                
+                case 'division':
+                    num2 = Math.floor(Math.random() * 20) + 5;
+                    const quotient = Math.floor(Math.random() * 50) + 10;
+                    num1 = num2 * quotient;
+                    problem = `${num1} ÷ ${num2}`;
+                    answer = quotient;
+                    break;
+            }
+
+            currentAnswer = answer;
+            document.getElementById('random-problem').textContent = problem + ' = ?';
+            document.getElementById('random-answer').style.display = 'block';
+            document.getElementById('check-random').style.display = 'block';
+            document.getElementById('random-answer').value = '';
+            document.getElementById('random-feedback').style.display = 'none';
+        }
+
+        function checkRandomAnswer() {
+            const input = document.getElementById('random-answer');
+            const feedback = document.getElementById('random-feedback');
+            const userAnswer = parseInt(input.value);
+
+            if (isNaN(userAnswer)) {
+                feedback.textContent = 'Please enter a number!';
+                feedback.className = 'feedback incorrect';
+                return;
+            }
+
+            if (userAnswer === currentAnswer) {
+                feedback.textContent = '🎉 Perfect! You got it right!';
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = `❌ Not quite. The answer is ${currentAnswer}. Try another problem!`;
+                feedback.className = 'feedback incorrect';
+            }
+        }
+
+        // Timer Challenge Game Functions
+        function startTimer() {
+            // Reset variables
+            timeRemaining = 60;
+            score = 0;
+            gameActive = true;
+
+            // Update UI
+            document.getElementById('start-timer').style.display = 'none';
+            document.getElementById('game-problem').style.display = 'block';
+            document.getElementById('game-answer').style.display = 'block';
+            document.getElementById('submit-game').style.display = 'block';
+            document.getElementById('score-display').textContent = 'Score: 0';
+            document.getElementById('final-score').style.display = 'none';
+            document.getElementById('game-answer').focus();
+
+            // Generate first problem
+            generateGameProblem();
+
+            // Start countdown
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                document.getElementById('timer-display').textContent = timeRemaining;
+
+                if (timeRemaining <= 10) {
+                    document.getElementById('timer-display').style.color = '#dc3545';
+                }
+
+                if (timeRemaining <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function generateGameProblem() {
+            const operations = ['add', 'sub', 'mul', 'div'];
+            const op = operations[Math.floor(Math.random() * operations.length)];
+            let num1, num2, problem, answer;
+
+            switch(op) {
+                case 'add':
+                    num1 = Math.floor(Math.random() * 200) + 20;
+                    num2 = Math.floor(Math.random() * 200) + 20;
+                    problem = `${num1} + ${num2}`;
+                    answer = num1 + num2;
+                    break;
+                case 'sub':
+                    num1 = Math.floor(Math.random() * 300) + 50;
+                    num2 = Math.floor(Math.random() * (num1 - 20)) + 20;
+                    problem = `${num1} - ${num2}`;
+                    answer = num1 - num2;
+                    break;
+                case 'mul':
+                    num1 = Math.floor(Math.random() * 30) + 5;
+                    num2 = Math.floor(Math.random() * 15) + 2;
+                    problem = `${num1} × ${num2}`;
+                    answer = num1 * num2;
+                    break;
+                case 'div':
+                    num2 = Math.floor(Math.random() * 12) + 3;
+                    const quotient = Math.floor(Math.random() * 20) + 5;
+                    num1 = num2 * quotient;
+                    problem = `${num1} ÷ ${num2}`;
+                    answer = quotient;
+                    break;
+            }
+
+            currentAnswer = answer;
+            document.getElementById('game-problem').textContent = problem + ' = ?';
+            document.getElementById('game-answer').value = '';
+        }
+
+        function submitGameAnswer() {
+            if (!gameActive) return;
+
+            const input = document.getElementById('game-answer');
+            const userAnswer = parseInt(input.value);
+
+            if (userAnswer === currentAnswer) {
+                score++;
+                document.getElementById('score-display').textContent = `Score: ${score} ✅`;
+                document.getElementById('score-display').style.color = '#28a745';
+                
+                setTimeout(() => {
+                    document.getElementById('score-display').style.color = '#333';
+                    if (gameActive) {
+                        generateGameProblem();
+                        input.focus();
+                    }
+                }, 300);
+            } else {
+                document.getElementById('score-display').textContent = `Score: ${score} ❌ (Answer was ${currentAnswer})`;
+                document.getElementById('score-display').style.color = '#dc3545';
+                
+                setTimeout(() => {
+                    document.getElementById('score-display').style.color = '#333';
+                    document.getElementById('score-display').textContent = `Score: ${score}`;
+                    if (gameActive) {
+                        generateGameProblem();
+                        input.focus();
+                    }
+                }, 800);
+            }
+        }
+
+        function endGame() {
+            gameActive = false;
+            clearInterval(timerInterval);
+
+            document.getElementById('timer-display').style.color = '#667eea';
+            document.getElementById('game-problem').style.display = 'none';
+            document.getElementById('game-answer').style.display = 'none';
+            document.getElementById('submit-game').style.display = 'none';
+            document.getElementById('start-timer').style.display = 'block';
+
+            let badge = '';
+            let message = '';
+
+            if (score >= 20) {
+                badge = '👑';
+                message = 'MASTER! You\'re a calculation champion!';
+            } else if (score >= 15) {
+                badge = '🥇';
+                message = 'ADVANCED! Excellent work!';
+            } else if (score >= 10) {
+                badge = '🥈';
+                message = 'INTERMEDIATE! Keep practicing!';
+            } else if (score >= 5) {
+                badge = '🥉';
+                message = 'BEGINNER! Good start!';
+            } else {
+                badge = '📚';
+                message = 'Keep learning! Practice makes perfect!';
+            }
+
+            document.getElementById('final-score').innerHTML = `
+                <div style="font-size: 3em;">${badge}</div>
+                <div style="font-size: 1.5em;">Final Score: ${score}</div>
+                <div>${message}</div>
+            `;
+            document.getElementById('final-score').style.display = 'block';
+        }
+
+        // Allow Enter key to check answers
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                const activeInput = document.activeElement;
+                if (activeInput.classList.contains('answer-input')) {
+                    const button = activeInput.nextElementSibling;
+                    if (button) button.click();
+                } else if (activeInput.id === 'random-answer') {
+                    checkRandomAnswer();
+                } else if (activeInput.id === 'game-answer' && gameActive) {
+                    submitGameAnswer();
+                }
+            }
+        });
+
+        // Keyboard shortcuts for timer game
+        document.addEventListener('keydown', function(event) {
+            if (event.key === ' ' && document.getElementById('start-timer').style.display !== 'none') {
+                event.preventDefault();
+                startTimer();
+            }
+        });
+    </script>
+</body>
+</html>
