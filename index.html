@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Math Training</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Speed Math Training</h1>
+        <nav>
+            <ul>
+                <li><a href="#learning-modes">Learning Modes</a></li>
+                <li><a href="#progress-tracking">Progress Tracking</a></li>
+                <li><a href="#improvement-plan">Improvement Plan</a></li>
+                <li><a href="#alerts">Alerts</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="learning-modes">
+            <h2>Learning Modes</h2>
+            <p>Select your preferred learning mode to begin training:</p>
+            <button id="mode1">Quick Practice</button>
+            <button id="mode2">Timed Challenge</button>
+            <button id="mode3">Puzzle Mode</button>
+        </section>
+        <section id="progress-tracking">
+            <h2>Progress Tracking</h2>
+            <div id="progress"></div>
+            <button onclick="viewProgress()">View Progress</button>
+        </section>
+        <section id="improvement-plan">
+            <h2>Improvement Plan</h2>
+            <button onclick="generatePlan()">Generate Plan</button>
+            <div id="plan"></div>
+        </section>
+        <section id="alerts">
+            <h2>Alerts</h2>
+            <div id="alerts"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 Speed Math Training</p>
+    </footer>
+</body>
+</html>
