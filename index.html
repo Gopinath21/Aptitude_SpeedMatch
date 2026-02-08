@@ -3,47 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speed Math Training</title>
+    <title>Speed Math Training Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
 </head>
 <body>
     <header>
-        <h1>Speed Math Training</h1>
+        <h1>Speed Math Training Dashboard</h1>
         <nav>
             <ul>
-                <li><a href="#learning-modes">Learning Modes</a></li>
-                <li><a href="#progress-tracking">Progress Tracking</a></li>
-                <li><a href="#improvement-plan">Improvement Plan</a></li>
-                <li><a href="#alerts">Alerts</a></li>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Exercises</a></li>
+                <li><a href="#">Leaderboard</a></li>
+                <li><a href="#">Contact</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <section id="learning-modes">
-            <h2>Learning Modes</h2>
-            <p>Select your preferred learning mode to begin training:</p>
-            <button id="mode1">Quick Practice</button>
-            <button id="mode2">Timed Challenge</button>
-            <button id="mode3">Puzzle Mode</button>
+        <section>
+            <h2>Welcome to Speed Math Training!</h2>
+            <p>Improve your calculation speed through fun and engaging exercises.</p>
+            <button>Start Training</button>
         </section>
-        <section id="progress-tracking">
-            <h2>Progress Tracking</h2>
-            <div id="progress"></div>
-            <button onclick="viewProgress()">View Progress</button>
-        </section>
-        <section id="improvement-plan">
-            <h2>Improvement Plan</h2>
-            <button onclick="generatePlan()">Generate Plan</button>
-            <div id="plan"></div>
-        </section>
-        <section id="alerts">
-            <h2>Alerts</h2>
-            <div id="alerts"></div>
+        <section>
+            <h2>Current Exercises</h2>
+            <div class="exercise">
+                <h3>Addition Challenge</h3>
+                <p>Solve as many addition problems as you can in 1 minute!</p>
+            </div>
+            <div class="exercise">
+                <h3>Multiplication Challenge</h3>
+                <p>Complete the multiplication table in the shortest time!</p>
+            </div>
         </section>
     </main>
     <footer>
-        <p>&copy; 2026 Speed Math Training</p>
+        <p>&copy; 2026 Speed Math Training. All rights reserved.</p>
     </footer>
 </body>
 </html>
