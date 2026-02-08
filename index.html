@@ -3,42 +3,1527 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speed Math Training Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Math Master - Addition & Subtraction Speed Math</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #11998e;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .tab-navigation {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 25px;
+            background: white;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #666;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            color: #11998e;
+        }
+
+        .tab-btn.active {
+            color: #11998e;
+            border-bottom-color: #11998e;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Learning Section Styles */
+        .concept-card {
+            background: #f8f9fa;
+            border-left: 4px solid #11998e;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .concept-card h3 {
+            color: #11998e;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .concept-card h4 {
+            color: #38ef7d;
+            margin: 15px 0 10px 0;
+            font-size: 1.1em;
+        }
+
+        .concept-card p {
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .concept-card ul, .concept-card ol {
+            margin-left: 20px;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .example-box {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+        }
+
+        .example-box .problem {
+            font-size: 1.2em;
+            color: #11998e;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .example-box .solution {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .example-box .answer {
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .tip-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .tip-box strong {
+            color: #856404;
+        }
+
+        /* Quiz Section Styles */
+        .difficulty-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .difficulty-btn {
+            padding: 15px 20px;
+            border: 2px solid #11998e;
+            background: white;
+            color: #11998e;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .difficulty-btn:hover {
+            background: #11998e;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .difficulty-btn.selected {
+            background: #11998e;
+            color: white;
+        }
+
+        .difficulty-desc {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .operation-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .operation-btn {
+            padding: 15px 30px;
+            border: 2px solid #38ef7d;
+            background: white;
+            color: #38ef7d;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s;
+        }
+
+        .operation-btn:hover {
+            background: #38ef7d;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .operation-btn.selected {
+            background: #38ef7d;
+            color: white;
+        }
+
+        .start-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 15px 50px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat {
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #11998e;
+        }
+
+        .timer {
+            color: #e74c3c;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 30px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+        }
+
+        .answer-input {
+            font-size: 1.5em;
+            padding: 15px;
+            border: 2px solid #11998e;
+            border-radius: 10px;
+            text-align: center;
+            width: 250px;
+            margin-bottom: 20px;
+        }
+
+        .submit-btn {
+            padding: 12px 40px;
+            background: #11998e;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #0e8274;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .results-summary {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-display {
+            font-size: 3em;
+            color: #11998e;
+            margin: 20px 0;
+        }
+
+        .performance-badge {
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 20px;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .badge-excellent {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-good {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .badge-needs-practice {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .improvements {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .improvements h3 {
+            color: #11998e;
+            margin-bottom: 15px;
+        }
+
+        .improvements ul {
+            list-style-position: inside;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .mistake-review {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .mistake-review h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .mistake-item {
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .retry-btn {
+            margin: 10px;
+            padding: 12px 30px;
+            background: #11998e;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+
+        .retry-btn:hover {
+            background: #0e8274;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            transition: width 0.3s;
+        }
+
+        .section-nav {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .section-nav-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #11998e;
+            color: #11998e;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .section-nav-btn:hover, .section-nav-btn.active {
+            background: #11998e;
+            color: white;
+        }
+
+        .concept-section {
+            display: none;
+        }
+
+        .concept-section.active {
+            display: block;
+        }
+
+        .scrollable {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .scrollable::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollable::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .scrollable::-webkit-scrollbar-thumb {
+            background: #11998e;
+            border-radius: 10px;
+        }
+
+        .number-display {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5em;
+            line-height: 1.8;
+        }
+
+        .vertical-add {
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .question-text {
+                font-size: 1.5em;
+            }
+
+            .difficulty-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Speed Math Training Dashboard</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Exercises</a></li>
-                <li><a href="#">Leaderboard</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <h2>Welcome to Speed Math Training!</h2>
-            <p>Improve your calculation speed through fun and engaging exercises.</p>
-            <button>Start Training</button>
-        </section>
-        <section>
-            <h2>Current Exercises</h2>
-            <div class="exercise">
-                <h3>Addition Challenge</h3>
-                <p>Solve as many addition problems as you can in 1 minute!</p>
+    <div class="container">
+        <h1>🧮 Math Master Challenge</h1>
+        <p class="subtitle">Master Addition & Subtraction with Speed Math Techniques!</p>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="learn">📚 Learn Concepts</button>
+            <button class="tab-btn" data-tab="quiz">🎯 Practice Quiz</button>
+            <button class="tab-btn" data-tab="examples">💡 Examples</button>
+        </div>
+
+        <!-- Learn Concepts Tab -->
+        <div class="tab-content active" id="learnTab">
+            <div class="section-nav">
+                <button class="section-nav-btn active" data-section="basics">Basics</button>
+                <button class="section-nav-btn" data-section="speed-addition">Speed Addition</button>
+                <button class="section-nav-btn" data-section="speed-subtraction">Speed Subtraction</button>
+                <button class="section-nav-btn" data-section="multi-number">Multi-Number Addition</button>
+                <button class="section-nav-btn" data-section="large-numbers">Large Numbers (5 Digits)</button>
             </div>
-            <div class="exercise">
-                <h3>Multiplication Challenge</h3>
-                <p>Complete the multiplication table in the shortest time!</p>
+
+            <div class="scrollable">
+                <!-- Basics Section -->
+                <div class="concept-section active" data-section="basics">
+                    <div class="concept-card">
+                        <h3>🎯 Foundation: Place Value System</h3>
+                        <p>Understanding place values is crucial for speed math:</p>
+                        <ul>
+                            <li><strong>Ones:</strong> 1, 2, 3... (1 digit)</li>
+                            <li><strong>Tens:</strong> 10, 20, 30... (2 digits)</li>
+                            <li><strong>Hundreds:</strong> 100, 200, 300... (3 digits)</li>
+                            <li><strong>Thousands:</strong> 1,000, 2,000, 3,000... (4 digits)</li>
+                            <li><strong>Ten Thousands:</strong> 10,000, 20,000... (5 digits)</li>
+                        </ul>
+                        
+                        <h4>Example: Breaking Down 45,678</h4>
+                        <div class="example-box">
+                            <div class="number-display">
+                                40,000 (Ten thousands)<br>
+                                + 5,000 (Thousands)<br>
+                                + 600 (Hundreds)<br>
+                                + 70 (Tens)<br>
+                                + 8 (Ones)<br>
+                                <div style="border-top: 2px solid #333; margin-top: 5px; padding-top: 5px;">
+                                = 45,678
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-card">
+                        <h3>✨ Mental Math Foundation</h3>
+                        <p><strong>Key Principle:</strong> Break numbers into friendly parts</p>
+                        
+                        <h4>Strategy 1: Making Tens</h4>
+                        <p>Round to nearest 10, 100, or 1000 first</p>
+                        <div class="example-box">
+                            <div class="problem">47 + 38 = ?</div>
+                            <div class="solution">
+                                Step 1: 47 + 3 = 50 (make 50 first)<br>
+                                Step 2: 38 - 3 = 35 (subtract what we added)<br>
+                                Step 3: 50 + 35 = 85
+                            </div>
+                            <div class="answer">Answer: 85</div>
+                        </div>
+
+                        <h4>Strategy 2: Breaking by Place Value</h4>
+                        <div class="example-box">
+                            <div class="problem">256 + 347 = ?</div>
+                            <div class="solution">
+                                Hundreds: 200 + 300 = 500<br>
+                                Tens: 50 + 40 = 90<br>
+                                Ones: 6 + 7 = 13<br>
+                                Total: 500 + 90 + 13 = 603
+                            </div>
+                            <div class="answer">Answer: 603</div>
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>💡 Pro Tip:</strong> Always look for numbers that make 10, 100, or 1000. This makes mental math much faster!
+                    </div>
+                </div>
+
+                <!-- Speed Addition Section -->
+                <div class="concept-section" data-section="speed-addition">
+                    <div class="concept-card">
+                        <h3>⚡ Speed Addition Techniques</h3>
+                        
+                        <h4>Technique 1: Left-to-Right Addition</h4>
+                        <p>Most people add right-to-left. Speed math uses left-to-right for faster mental calculation.</p>
+                        <div class="example-box">
+                            <div class="problem">4,567 + 3,289 = ?</div>
+                            <div class="solution">
+                                <strong>Traditional (slow):</strong> Start from ones place<br>
+                                <strong>Speed Method (fast):</strong><br>
+                                Step 1: 4,000 + 3,000 = 7,000<br>
+                                Step 2: 500 + 200 = 700 → Running total: 7,700<br>
+                                Step 3: 60 + 80 = 140 → Running total: 7,840<br>
+                                Step 4: 7 + 9 = 16 → Final: 7,856
+                            </div>
+                            <div class="answer">Answer: 7,856</div>
+                        </div>
+
+                        <h4>Technique 2: Compensation Method</h4>
+                        <p>Round one number, then adjust</p>
+                        <div class="example-box">
+                            <div class="problem">496 + 287 = ?</div>
+                            <div class="solution">
+                                Step 1: Round 496 to 500 (+4)<br>
+                                Step 2: 500 + 287 = 787<br>
+                                Step 3: Subtract the 4 we added: 787 - 4 = 783
+                            </div>
+                            <div class="answer">Answer: 783</div>
+                        </div>
+
+                        <h4>Technique 3: Clustering Method</h4>
+                        <p>Group numbers that add to round numbers</p>
+                        <div class="example-box">
+                            <div class="problem">48 + 52 + 37 + 63 = ?</div>
+                            <div class="solution">
+                                Group pairs that make 100:<br>
+                                (48 + 52) + (37 + 63)<br>
+                                = 100 + 100<br>
+                                = 200
+                            </div>
+                            <div class="answer">Answer: 200</div>
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>⚡ Speed Tip:</strong> For numbers ending in 8 or 9, add 10 or 100, then subtract the difference. For example: 498 + 300 = (500 + 300) - 2 = 798
+                    </div>
+                </div>
+
+                <!-- Speed Subtraction Section -->
+                <div class="concept-section" data-section="speed-subtraction">
+                    <div class="concept-card">
+                        <h3>🎯 Speed Subtraction Techniques</h3>
+                        
+                        <h4>Technique 1: Adding Up Method</h4>
+                        <p>Instead of subtracting, count up to the larger number</p>
+                        <div class="example-box">
+                            <div class="problem">1,000 - 647 = ?</div>
+                            <div class="solution">
+                                Count up from 647 to 1,000:<br>
+                                647 + 3 = 650 (added 3)<br>
+                                650 + 50 = 700 (added 50)<br>
+                                700 + 300 = 1,000 (added 300)<br>
+                                Total added: 3 + 50 + 300 = 353
+                            </div>
+                            <div class="answer">Answer: 353</div>
+                        </div>
+
+                        <h4>Technique 2: Equal Addition Method</h4>
+                        <p>Add the same number to both numbers to make subtraction easier</p>
+                        <div class="example-box">
+                            <div class="problem">543 - 298 = ?</div>
+                            <div class="solution">
+                                Add 2 to both numbers:<br>
+                                543 + 2 = 545<br>
+                                298 + 2 = 300<br>
+                                Now: 545 - 300 = 245
+                            </div>
+                            <div class="answer">Answer: 245</div>
+                        </div>
+
+                        <h4>Technique 3: Breaking Down Method</h4>
+                        <div class="example-box">
+                            <div class="problem">856 - 347 = ?</div>
+                            <div class="solution">
+                                Break the subtraction into parts:<br>
+                                856 - 300 = 556<br>
+                                556 - 40 = 516<br>
+                                516 - 7 = 509
+                            </div>
+                            <div class="answer">Answer: 509</div>
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>💡 Subtraction Tip:</strong> When subtracting from numbers like 1,000 or 10,000, use the "counting up" method - it's much faster than traditional borrowing!
+                    </div>
+                </div>
+
+                <!-- Multi-Number Addition Section -->
+                <div class="concept-section" data-section="multi-number">
+                    <div class="concept-card">
+                        <h3>🔢 Adding Multiple Numbers (4-10 Numbers)</h3>
+                        
+                        <h4>Technique 1: Vertical Column Addition</h4>
+                        <p>Stack numbers and add column by column, left to right</p>
+                        <div class="example-box">
+                            <div class="problem">Add: 234 + 567 + 891 + 123 + 456</div>
+                            <div class="number-display">
+                                  234<br>
+                                  567<br>
+                                  891<br>
+                                  123<br>
+                                + 456<br>
+                                <div style="border-top: 2px solid #333; margin-top: 5px;"></div>
+                            </div>
+                            <div class="solution">
+                                <strong>Add each column:</strong><br>
+                                Hundreds: 2+5+8+1+4 = 20 (2,000)<br>
+                                Tens: 3+6+9+2+5 = 25 (250)<br>
+                                Ones: 4+7+1+3+6 = 21<br>
+                                Total: 2,000 + 250 + 21 = 2,271
+                            </div>
+                            <div class="answer">Answer: 2,271</div>
+                        </div>
+
+                        <h4>Technique 2: Pairing Method</h4>
+                        <p>Find pairs that sum to 10, 100, or 1000</p>
+                        <div class="example-box">
+                            <div class="problem">15 + 85 + 43 + 57 + 22 + 78 = ?</div>
+                            <div class="solution">
+                                Find pairs summing to 100:<br>
+                                (15 + 85) = 100<br>
+                                (43 + 57) = 100<br>
+                                (22 + 78) = 100<br>
+                                Total: 100 + 100 + 100 = 300
+                            </div>
+                            <div class="answer">Answer: 300</div>
+                        </div>
+
+                        <h4>Technique 3: Grouping by Similarity</h4>
+                        <div class="example-box">
+                            <div class="problem">400 + 250 + 600 + 150 + 300 = ?</div>
+                            <div class="solution">
+                                Group hundreds:<br>
+                                (400 + 600) = 1,000<br>
+                                (250 + 150) = 400<br>
+                                300 = 300<br>
+                                Total: 1,000 + 400 + 300 = 1,700
+                            </div>
+                            <div class="answer">Answer: 1,700</div>
+                        </div>
+
+                        <h4>Technique 4: Running Total Method</h4>
+                        <p>Keep a mental running total, adding one number at a time</p>
+                        <div class="example-box">
+                            <div class="problem">45 + 23 + 67 + 12 + 38 = ?</div>
+                            <div class="solution">
+                                Start: 45<br>
+                                +23: 45 + 20 = 65, +3 = 68<br>
+                                +67: 68 + 60 = 128, +7 = 135<br>
+                                +12: 135 + 12 = 147<br>
+                                +38: 147 + 40 = 187, -2 = 185
+                            </div>
+                            <div class="answer">Answer: 185</div>
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>🎯 Pro Strategy:</strong> For 6+ numbers, use vertical alignment and add columns. For 4-5 numbers, use pairing or running total based on the numbers you see.
+                    </div>
+                </div>
+
+                <!-- Large Numbers Section -->
+                <div class="concept-section" data-section="large-numbers">
+                    <div class="concept-card">
+                        <h3>🚀 Working with Large Numbers (Up to 5 Digits)</h3>
+                        
+                        <h4>Technique 1: Chunking Method</h4>
+                        <p>Break 5-digit numbers into manageable chunks</p>
+                        <div class="example-box">
+                            <div class="problem">45,678 + 23,456 = ?</div>
+                            <div class="solution">
+                                <strong>Chunk by thousands:</strong><br>
+                                45,000 + 23,000 = 68,000<br>
+                                678 + 456 = 1,134<br>
+                                Total: 68,000 + 1,134 = 69,134
+                            </div>
+                            <div class="answer">Answer: 69,134</div>
+                        </div>
+
+                        <h4>Technique 2: Rounding to Nearest Thousand</h4>
+                        <div class="example-box">
+                            <div class="problem">37,892 + 42,156 = ?</div>
+                            <div class="solution">
+                                Round to thousands:<br>
+                                38,000 + 42,000 = 80,000<br>
+                                Adjust: -108 + 156 = +48<br>
+                                Total: 80,000 + 48 = 80,048
+                            </div>
+                            <div class="answer">Answer: 80,048</div>
+                        </div>
+
+                        <h4>Technique 3: Large Number Subtraction</h4>
+                        <div class="example-box">
+                            <div class="problem">75,000 - 23,678 = ?</div>
+                            <div class="solution">
+                                <strong>Count up from 23,678 to 75,000:</strong><br>
+                                23,678 → 24,000 (add 322)<br>
+                                24,000 → 75,000 (add 51,000)<br>
+                                Total: 322 + 51,000 = 51,322
+                            </div>
+                            <div class="answer">Answer: 51,322</div>
+                        </div>
+
+                        <h4>Technique 4: Place Value Addition</h4>
+                        <div class="example-box">
+                            <div class="problem">67,543 + 28,967 = ?</div>
+                            <div class="number-display">
+                                  67,543<br>
+                                + 28,967<br>
+                                <div style="border-top: 2px solid #333; margin-top: 5px;"></div>
+                            </div>
+                            <div class="solution">
+                                Ten-thousands: 60,000 + 20,000 = 80,000<br>
+                                Thousands: 7,000 + 8,000 = 15,000<br>
+                                Hundreds: 500 + 900 = 1,400<br>
+                                Tens: 40 + 60 = 100<br>
+                                Ones: 3 + 7 = 10<br>
+                                Sum: 80,000 + 15,000 + 1,400 + 100 + 10 = 96,510
+                            </div>
+                            <div class="answer">Answer: 96,510</div>
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>🎓 Master Strategy:</strong> For 5-digit numbers, always break them into thousands and hundreds first. Your brain handles smaller chunks much better!
+                    </div>
+
+                    <div class="concept-card">
+                        <h3>📊 Practice Progression</h3>
+                        <ol>
+                            <li><strong>Level 1:</strong> Single digit (1-9)</li>
+                            <li><strong>Level 2:</strong> Two digits (10-99)</li>
+                            <li><strong>Level 3:</strong> Three digits (100-999)</li>
+                            <li><strong>Level 4:</strong> Four digits (1,000-9,999)</li>
+                            <li><strong>Level 5:</strong> Five digits (10,000-99,999)</li>
+                        </ol>
+                        <p style="margin-top: 15px;"><strong>Recommendation:</strong> Master each level before moving to the next. Aim for 90% accuracy before advancing!</p>
+                    </div>
+                </div>
             </div>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 Speed Math Training. All rights reserved.</p>
-    </footer>
+        </div>
+
+        <!-- Examples Tab -->
+        <div class="tab-content" id="examplesTab">
+            <div class="scrollable">
+                <div class="concept-card">
+                    <h3>📝 Worked Examples - Addition</h3>
+                    
+                    <div class="example-box">
+                        <div class="problem">Example 1: 8 + 7 (Single Digit)</div>
+                        <div class="solution">
+                            <strong>Make 10 Method:</strong><br>
+                            8 needs 2 to make 10<br>
+                            Break 7 into 2 + 5<br>
+                            8 + 2 = 10<br>
+                            10 + 5 = 15
+                        </div>
+                        <div class="answer">Answer: 15</div>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="problem">Example 2: 47 + 68 (Two Digits)</div>
+                        <div class="solution">
+                            <strong>Compensation Method:</strong><br>
+                            Round 68 to 70 (+2)<br>
+                            47 + 70 = 117<br>
+                            Subtract the 2: 117 - 2 = 115
+                        </div>
+                        <div class="answer">Answer: 115</div>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="problem">Example 3: 456 + 789 (Three Digits)</div>
+                        <div class="solution">
+                            <strong>Left-to-Right Method:</strong><br>
+                            400 + 700 = 1,100<br>
+                            50 + 80 = 130 → Running: 1,230<br>
+                            6 + 9 = 15 → Final: 1,245
+                        </div>
+                        <div class="answer">Answer: 1,245</div>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="problem">Example 4: 3,456 + 2,789 (Four Digits)</div>
+                        <div class="solution">
+                            <strong>Chunking Method:</strong><br>
+                            Thousands: 3,000 + 2,000 = 5,000<br>
+                            Remainder: 456 + 789 = 1,245<br>
+                            Total: 5,000 + 1,245 = 6,245
+                        </div>
+                        <div class="answer">Answer: 6,245</div>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="problem">Example 5: 45,678 + 32,456 (Five Digits)</div>
+                        <div class="solution">
+                            <strong>Place Value Method:</strong><br>
+                            Ten-thousands: 40,000 + 30,000 = 70,000<br>
+                            Thousands: 5,000 + 2,000 = 7,000<br>
+                            Hundreds: 600 + 400 = 1,000<br>
+                            Tens: 70 + 50 = 120<br>
+                            Ones: 8 + 6 = 14<br>
+                            Sum: 70,000 + 7,000 + 1,000 + 120 + 14 = 78,134
+                        </div>
+                        <div class="answer">Answer: 78,134</div>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="problem">Example 6: Multi-Number Addition</div>
+                        <div class="problem">23 + 45 + 67 + 89 + 12 + 34 = ?</div>
+                        <div class="solution">
+                            <strong>Pairing Method:</strong><br>
+                            Find complementary pairs:<br>
+                            (23 + 67) = 90<br>
+                            (45 + 12 + 34) = 91 (break as 45+45=90, +1)<br>
+                            89 = 89<br>
+                            Total: 90 + 91 + 89 = 270
+                        </div>
+                        <div class="answer">Answer: 270</div>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <h3>📝 Worked Examples - Subtraction</h3>
+                    
+                    <div class="example-box">
+                        <div class="problem">Example 1: 15 - 8 (Single Digit)</div>
+                        <div class="solution">
+                            <strong>Think Addition:</strong><br>
+                            8 + ? = 15<br>
+                            8 + 2 = 10<br>
+                            10 + 5 = 15<br>
+                            So: 2 + 5 = 7
+                        </div>
+                        <div class="answer">Answer: 7</div>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="problem">Example 2: 83 - 47 (Two Digits)</div>
+                        <div class="solution">
+                            <strong>Adding Up Method:</strong><br>
+                            From 47 to 83:<br>
+                            47 + 3 = 50<br>
+                            50 + 30 = 80<br>
+                            80 + 3 = 83<br>
+                            Total added: 3 + 30 + 3 = 36
+                        </div>
+                        <div class="answer">Answer: 36</div>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="problem">Example 3: 642 - 287 (Three Digits)</div>
+                        <div class="solution">
+                            <strong>Equal Addition:</strong><br>
+                            Add 13 to both:<br>
+                            642 + 13 = 655<br>
+                            287 + 13 = 300<br>
+                            655 - 300 = 355
+                        </div>
+                        <div class="answer">Answer: 355</div>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="problem">Example 4: 5,000 - 2,347 (Four Digits)</div>
+                        <div class="solution">
+                            <strong>Count Up Method:</strong><br>
+                            2,347 → 2,400 (add 53)<br>
+                            2,400 → 5,000 (add 2,600)<br>
+                            Total: 53 + 2,600 = 2,653
+                        </div>
+                        <div class="answer">Answer: 2,653</div>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="problem">Example 5: 78,543 - 45,678 (Five Digits)</div>
+                        <div class="solution">
+                            <strong>Breaking Down:</strong><br>
+                            78,543 - 45,000 = 33,543<br>
+                            33,543 - 600 = 32,943<br>
+                            32,943 - 70 = 32,873<br>
+                            32,873 - 8 = 32,865
+                        </div>
+                        <div class="answer">Answer: 32,865</div>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <h3>🎯 Challenge Examples</h3>
+                    
+                    <div class="example-box">
+                        <div class="problem">Challenge 1: Add seven numbers</div>
+                        <div class="problem">234 + 567 + 123 + 456 + 789 + 321 + 654 = ?</div>
+                        <div class="solution">
+                            <strong>Column Addition:</strong><br>
+                            Hundreds: 2+5+1+4+7+3+6 = 28 (2,800)<br>
+                            Tens: 3+6+2+5+8+2+5 = 31 (310)<br>
+                            Ones: 4+7+3+6+9+1+4 = 34<br>
+                            Total: 2,800 + 310 + 34 = 3,144
+                        </div>
+                        <div class="answer">Answer: 3,144</div>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="problem">Challenge 2: Large subtraction</div>
+                        <div class="problem">99,999 - 45,678 = ?</div>
+                        <div class="solution">
+                            <strong>Complement Method:</strong><br>
+                            Think: what adds to 45,678 to make 100,000?<br>
+                            100,000 - 45,678 = 54,322<br>
+                            Then: 54,322 - 1 = 54,321
+                        </div>
+                        <div class="answer">Answer: 54,321</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Tab -->
+        <div class="tab-content" id="quizTab">
+            <!-- Setup Screen -->
+            <div class="setup-screen active">
+                <h2 style="text-align: center; margin-bottom: 20px;">Choose Your Challenge Level</h2>
+                
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn selected" data-difficulty="single">
+                        <div>Single Digit</div>
+                        <div class="difficulty-desc">1-9</div>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="double">
+                        <div>Two Digits</div>
+                        <div class="difficulty-desc">10-99</div>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="triple">
+                        <div>Three Digits</div>
+                        <div class="difficulty-desc">100-999</div>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="four">
+                        <div>Four Digits</div>
+                        <div class="difficulty-desc">1,000-9,999</div>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="five">
+                        <div>Five Digits</div>
+                        <div class="difficulty-desc">10,000-99,999</div>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="multi">
+                        <div>Multi-Number</div>
+                        <div class="difficulty-desc">4-10 numbers</div>
+                    </button>
+                </div>
+
+                <div class="operation-selector">
+                    <button class="operation-btn selected" data-operation="addition">Addition +</button>
+                    <button class="operation-btn" data-operation="subtraction">Subtraction −</button>
+                    <button class="operation-btn" data-operation="mixed">Mixed</button>
+                </div>
+
+                <button class="start-btn">Start Challenge!</button>
+            </div>
+
+            <!-- Game Screen -->
+            <div class="game-screen">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+
+                <div class="game-header">
+                    <div class="stat">
+                        <div class="stat-label">Question</div>
+                        <div class="stat-value" id="questionNumber">1/10</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Score</div>
+                        <div class="stat-value" id="currentScore">0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Timer</div>
+                        <div class="stat-value timer" id="timer">0s</div>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text" id="questionText">45 + 67 = ?</div>
+                    <input type="number" class="answer-input" id="answerInput" placeholder="Your answer">
+                    <br>
+                    <button class="submit-btn" id="submitBtn">Submit Answer</button>
+                    <div class="feedback" id="feedback"></div>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="results-screen">
+                <div class="results-summary">
+                    <h2>Challenge Complete! 🎉</h2>
+                    <div class="score-display" id="finalScore">8/10</div>
+                    <div class="performance-badge" id="performanceBadge">Excellent!</div>
+                    <p style="margin-top: 10px; color: #666;" id="timeDisplay">Completed in 45 seconds</p>
+                </div>
+
+                <div class="mistake-review" id="mistakeReview" style="display: none;">
+                    <h3>📝 Review Your Mistakes</h3>
+                    <div id="mistakesList"></div>
+                </div>
+
+                <div class="improvements">
+                    <h3>💡 How to Improve</h3>
+                    <ul id="improvementsList"></ul>
+                </div>
+
+                <div style="text-align: center;">
+                    <button class="retry-btn" id="retryBtn">Try Again</button>
+                    <button class="retry-btn" id="newChallengeBtn">New Challenge</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            difficulty: 'single',
+            operation: 'addition',
+            currentQuestion: 0,
+            score: 0,
+            questions: [],
+            answers: [],
+            mistakes: [],
+            startTime: null,
+            timerInterval: null
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTabs();
+            setupGameListeners();
+        });
+
+        // Tab Navigation
+        function initializeTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabName = btn.dataset.tab;
+                    switchTab(tabName);
+                });
+            });
+
+            // Section navigation in Learn tab
+            const sectionBtns = document.querySelectorAll('.section-nav-btn');
+            sectionBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const section = btn.dataset.section;
+                    switchSection(section);
+                });
+            });
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.tab === tabName) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            if (tabName === 'learn') {
+                document.getElementById('learnTab').classList.add('active');
+            } else if (tabName === 'quiz') {
+                document.getElementById('quizTab').classList.add('active');
+            } else if (tabName === 'examples') {
+                document.getElementById('examplesTab').classList.add('active');
+            }
+        }
+
+        function switchSection(sectionName) {
+            document.querySelectorAll('.section-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.section === sectionName) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.concept-section').forEach(section => {
+                section.classList.remove('active');
+                if (section.dataset.section === sectionName) {
+                    section.classList.add('active');
+                }
+            });
+        }
+
+        function setupGameListeners() {
+            // Difficulty selection
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    gameState.difficulty = btn.dataset.difficulty;
+                });
+            });
+
+            // Operation selection
+            document.querySelectorAll('.operation-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.operation-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    gameState.operation = btn.dataset.operation;
+                });
+            });
+
+            document.querySelector('.start-btn').addEventListener('click', startGame);
+            document.getElementById('submitBtn').addEventListener('click', submitAnswer);
+            document.getElementById('answerInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') submitAnswer();
+            });
+            document.getElementById('retryBtn').addEventListener('click', startGame);
+            document.getElementById('newChallengeBtn').addEventListener('click', () => {
+                showGameScreen('setup');
+            });
+        }
+
+        function showGameScreen(screen) {
+            document.querySelectorAll('.setup-screen, .game-screen, .results-screen').forEach(s => {
+                s.classList.remove('active');
+            });
+            document.querySelector(`.${screen}-screen`).classList.add('active');
+        }
+
+        function generateNumber(difficulty) {
+            const ranges = {
+                single: { min: 1, max: 9 },
+                double: { min: 10, max: 99 },
+                triple: { min: 100, max: 999 },
+                four: { min: 1000, max: 9999 },
+                five: { min: 10000, max: 99999 }
+            };
+
+            const range = ranges[difficulty] || ranges.single;
+            return Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+        }
+
+        function generateQuestions() {
+            const questions = [];
+            
+            if (gameState.difficulty === 'multi') {
+                // Multi-number addition
+                for (let i = 0; i < 10; i++) {
+                    const count = Math.floor(Math.random() * 7) + 4; // 4-10 numbers
+                    const numbers = [];
+                    let sum = 0;
+                    
+                    for (let j = 0; j < count; j++) {
+                        const num = generateNumber('double'); // Use 2-digit numbers
+                        numbers.push(num);
+                        sum += num;
+                    }
+                    
+                    questions.push({
+                        numbers: numbers,
+                        operation: 'addition',
+                        answer: sum,
+                        displayText: numbers.join(' + ') + ' = ?'
+                    });
+                }
+            } else {
+                // Regular 2-number operations
+                for (let i = 0; i < 10; i++) {
+                    let num1 = generateNumber(gameState.difficulty);
+                    let num2 = generateNumber(gameState.difficulty);
+                    
+                    let operation = gameState.operation;
+                    if (operation === 'mixed') {
+                        operation = Math.random() < 0.5 ? 'addition' : 'subtraction';
+                    }
+                    
+                    let answer, displayText;
+                    if (operation === 'addition') {
+                        answer = num1 + num2;
+                        displayText = `${num1.toLocaleString()} + ${num2.toLocaleString()} = ?`;
+                    } else {
+                        // Ensure positive result for subtraction
+                        if (num2 > num1) {
+                            [num1, num2] = [num2, num1];
+                        }
+                        answer = num1 - num2;
+                        displayText = `${num1.toLocaleString()} − ${num2.toLocaleString()} = ?`;
+                    }
+                    
+                    questions.push({
+                        num1: num1,
+                        num2: num2,
+                        operation: operation,
+                        answer: answer,
+                        displayText: displayText
+                    });
+                }
+            }
+            
+            return questions;
+        }
+
+        function startGame() {
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            gameState.questions = generateQuestions();
+            gameState.answers = [];
+            gameState.mistakes = [];
+            gameState.startTime = Date.now();
+            
+            showGameScreen('game');
+            startTimer();
+            displayQuestion();
+        }
+
+        function startTimer() {
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+            
+            gameState.timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+                document.getElementById('timer').textContent = elapsed + 's';
+            }, 1000);
+        }
+
+        function displayQuestion() {
+            const question = gameState.questions[gameState.currentQuestion];
+            
+            document.getElementById('questionText').textContent = question.displayText;
+            document.getElementById('questionNumber').textContent = `${gameState.currentQuestion + 1}/10`;
+            document.getElementById('currentScore').textContent = gameState.score;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('answerInput').focus();
+            
+            const progress = ((gameState.currentQuestion) / 10) * 100;
+            document.querySelector('.progress-fill').style.width = progress + '%';
+        }
+
+        function submitAnswer() {
+            const userAnswer = parseInt(document.getElementById('answerInput').value);
+            const question = gameState.questions[gameState.currentQuestion];
+            const feedback = document.getElementById('feedback');
+            
+            if (isNaN(userAnswer)) {
+                feedback.textContent = 'Please enter a number!';
+                feedback.className = 'feedback incorrect';
+                return;
+            }
+            
+            const isCorrect = userAnswer === question.answer;
+            
+            gameState.answers.push({
+                question: question,
+                userAnswer: userAnswer,
+                correct: isCorrect
+            });
+            
+            if (isCorrect) {
+                gameState.score++;
+                feedback.textContent = '✓ Correct! Well done!';
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = `✗ Incorrect. The answer is ${question.answer.toLocaleString()}`;
+                feedback.className = 'feedback incorrect';
+                gameState.mistakes.push({
+                    question: question,
+                    userAnswer: userAnswer
+                });
+            }
+            
+            document.getElementById('currentScore').textContent = gameState.score;
+            
+            setTimeout(() => {
+                gameState.currentQuestion++;
+                if (gameState.currentQuestion < 10) {
+                    displayQuestion();
+                } else {
+                    endGame();
+                }
+            }, 1500);
+        }
+
+        function endGame() {
+            clearInterval(gameState.timerInterval);
+            const totalTime = Math.floor((Date.now() - gameState.startTime) / 1000);
+            
+            showGameScreen('results');
+            
+            document.getElementById('finalScore').textContent = `${gameState.score}/10`;
+            document.getElementById('timeDisplay').textContent = `Completed in ${totalTime} seconds`;
+            
+            // Performance badge
+            const badge = document.getElementById('performanceBadge');
+            if (gameState.score >= 9) {
+                badge.textContent = '🌟 Excellent! Math Master!';
+                badge.className = 'performance-badge badge-excellent';
+            } else if (gameState.score >= 7) {
+                badge.textContent = '👍 Good Job! Keep Practicing!';
+                badge.className = 'performance-badge badge-good';
+            } else {
+                badge.textContent = '📚 Needs Practice - You Can Do It!';
+                badge.className = 'performance-badge badge-needs-practice';
+            }
+            
+            // Show mistakes
+            if (gameState.mistakes.length > 0) {
+                document.getElementById('mistakeReview').style.display = 'block';
+                const mistakesList = document.getElementById('mistakesList');
+                mistakesList.innerHTML = '';
+                
+                gameState.mistakes.forEach(mistake => {
+                    const div = document.createElement('div');
+                    div.className = 'mistake-item';
+                    div.innerHTML = `
+                        <strong>${mistake.question.displayText}</strong><br>
+                        Your answer: ${mistake.userAnswer.toLocaleString()} | Correct answer: ${mistake.question.answer.toLocaleString()}
+                    `;
+                    mistakesList.appendChild(div);
+                });
+            } else {
+                document.getElementById('mistakeReview').style.display = 'none';
+            }
+            
+            generateImprovements();
+        }
+
+        function generateImprovements() {
+            const improvements = [];
+            const avgTime = Math.floor((Date.now() - gameState.startTime) / 10000);
+            
+            // Difficulty-based tips
+            const difficultyTips = {
+                single: [
+                    'Practice making 10s - memorize pairs that add to 10',
+                    'Use finger counting for quick verification',
+                    'Try the number line visualization method'
+                ],
+                double: [
+                    'Use the compensation method - round to nearest 10',
+                    'Practice left-to-right addition for speed',
+                    'Break numbers into tens and ones'
+                ],
+                triple: [
+                    'Master chunking - break into hundreds and tens',
+                    'Practice the rounding and adjustment technique',
+                    'Visualize numbers in place value columns'
+                ],
+                four: [
+                    'Use the thousand-chunking method',
+                    'Practice with vertical alignment mentally',
+                    'Round to nearest thousand for estimation'
+                ],
+                five: [
+                    'Break into ten-thousands and remainder',
+                    'Use the left-to-right addition method',
+                    'Practice with real-world large numbers (prices, distances)'
+                ],
+                multi: [
+                    'Look for pairs that make 10, 100, or round numbers',
+                    'Use vertical column addition for 6+ numbers',
+                    'Practice grouping similar magnitudes together'
+                ]
+            };
+
+            if (gameState.score < 7) {
+                improvements.push('Review the speed math concepts in the Learn tab');
+                improvements.push('Practice 10-15 minutes daily for best results');
+                improvements.push(...difficultyTips[gameState.difficulty].slice(0, 2));
+            } else if (gameState.score < 9) {
+                improvements.push('Great progress! Focus on your mistake patterns');
+                improvements.push(...difficultyTips[gameState.difficulty].slice(0, 1));
+            } else {
+                improvements.push('Outstanding! Try the next difficulty level');
+                improvements.push('Challenge yourself with mixed operations');
+            }
+
+            if (avgTime > 5) {
+                improvements.push('Work on speed - aim for under 5 seconds per question');
+                improvements.push('Practice mental math without writing steps');
+            }
+
+            if (gameState.operation === 'subtraction' && gameState.mistakes.length > 2) {
+                improvements.push('Review the "counting up" method for subtraction');
+                improvements.push('Practice the equal addition technique');
+            }
+
+            improvements.push('Visit the Examples tab for step-by-step solutions');
+            improvements.push('Consistent daily practice builds speed and accuracy!');
+
+            const list = document.getElementById('improvementsList');
+            list.innerHTML = '';
+            improvements.forEach(tip => {
+                const li = document.createElement('li');
+                li.textContent = tip;
+                list.appendChild(li);
+            });
+        }
+    </script>
 </body>
 </html>
