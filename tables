@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Master Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .setup-screen, .game-screen, .results-screen {
+            display: none;
+        }
+
+        .setup-screen.active, .game-screen.active, .results-screen.active {
+            display: block;
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .difficulty-btn {
+            padding: 15px 30px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s;
+        }
+
+        .difficulty-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .difficulty-btn.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .operation-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .operation-btn {
+            padding: 15px 30px;
+            border: 2px solid #764ba2;
+            background: white;
+            color: #764ba2;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s;
+        }
+
+        .operation-btn:hover {
+            background: #764ba2;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .operation-btn.selected {
+            background: #764ba2;
+            color: white;
+        }
+
+        .start-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 15px 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .timer {
+            color: #e74c3c;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .answer-input {
+            font-size: 1.5em;
+            padding: 15px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            text-align: center;
+            width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .submit-btn {
+            padding: 12px 40px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #5568d3;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .results-summary {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-display {
+            font-size: 3em;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .performance-badge {
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 20px;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .badge-excellent {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-good {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .badge-needs-practice {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .improvements {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .improvements h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .improvements ul {
+            list-style-position: inside;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .mistake-review {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .mistake-review h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .mistake-item {
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .retry-btn {
+            margin: 10px;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+
+        .retry-btn:hover {
+            background: #5568d3;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        .tab-navigation {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            padding: 12px 30px;
+            background: white;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #666;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            color: #667eea;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tables-container {
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .table-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .table-number-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            min-width: 50px;
+        }
+
+        .table-number-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .table-number-btn.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .operation-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .toggle-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #764ba2;
+            color: #764ba2;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn.active {
+            background: #764ba2;
+            color: white;
+        }
+
+        .math-table {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .math-table h3 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .table-row {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            font-size: 1.1em;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .table-row:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .table-row .equation {
+            color: #333;
+        }
+
+        .table-row .result {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .all-tables-view {
+            display: none;
+        }
+
+        .all-tables-view.active {
+            display: block;
+        }
+
+        .show-all-btn {
+            display: block;
+            margin: 0 auto 20px;
+            padding: 10px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .show-all-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Math Master Challenge</h1>
+        <p class="subtitle">Master multiplication and division tables 1-20!</p>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="game">Game</button>
+            <button class="tab-btn" data-tab="tables">Tables Reference</button>
+        </div>
+
+        <!-- Game Tab Content -->
+        <div class="tab-content" id="gameTab">
+        <!-- Setup Screen -->
+        <div class="setup-screen active">
+            <h2 style="text-align: center; margin-bottom: 20px;">Choose Your Challenge</h2>
+            
+            <div class="difficulty-selector">
+                <button class="difficulty-btn selected" data-difficulty="easy">Easy (1-10)</button>
+                <button class="difficulty-btn" data-difficulty="medium">Medium (1-15)</button>
+                <button class="difficulty-btn" data-difficulty="hard">Hard (1-20)</button>
+            </div>
+
+            <div class="operation-selector">
+                <button class="operation-btn selected" data-operation="multiplication">Multiplication ×</button>
+                <button class="operation-btn" data-operation="division">Division ÷</button>
+                <button class="operation-btn" data-operation="mixed">Mixed</button>
+            </div>
+
+            <button class="start-btn">Start Challenge!</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="game-screen">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <div class="game-header">
+                <div class="stat">
+                    <div class="stat-label">Question</div>
+                    <div class="stat-value" id="questionNumber">1/10</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Score</div>
+                    <div class="stat-value" id="currentScore">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Timer</div>
+                    <div class="stat-value timer" id="timer">0s</div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text" id="questionText">8 × 7 = ?</div>
+                <input type="number" class="answer-input" id="answerInput" placeholder="Your answer">
+                <br>
+                <button class="submit-btn" id="submitBtn">Submit Answer</button>
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen">
+            <div class="results-summary">
+                <h2>Challenge Complete! 🎉</h2>
+                <div class="score-display" id="finalScore">8/10</div>
+                <div class="performance-badge" id="performanceBadge">Excellent!</div>
+                <p style="margin-top: 10px; color: #666;" id="timeDisplay">Completed in 45 seconds</p>
+            </div>
+
+            <div class="mistake-review" id="mistakeReview" style="display: none;">
+                <h3>📝 Review Your Mistakes</h3>
+                <div id="mistakesList"></div>
+            </div>
+
+            <div class="improvements">
+                <h3>💡 How to Improve</h3>
+                <ul id="improvementsList"></ul>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="retry-btn" id="retryBtn">Try Again</button>
+                <button class="retry-btn" id="newChallengeBtn">New Challenge</button>
+            </div>
+        </div>
+        </div>
+        <!-- End Game Tab Content -->
+
+        <!-- Tables Tab Content -->
+        <div class="tab-content" id="tablesTab">
+            <div class="operation-toggle">
+                <button class="toggle-btn active" data-operation="mult">Multiplication Tables</button>
+                <button class="toggle-btn" data-operation="div">Division Tables</button>
+            </div>
+
+            <button class="show-all-btn" id="showAllBtn">Show All Tables (2-20)</button>
+
+            <div class="table-selector" id="tableSelector">
+                <!-- Table number buttons will be generated here -->
+            </div>
+
+            <div class="tables-container" id="tablesContainer">
+                <!-- Tables will be generated here -->
+            </div>
+
+            <div class="all-tables-view" id="allTablesView">
+                <!-- All tables will be shown here -->
+            </div>
+        </div>
+        <!-- End Tables Tab Content -->
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            difficulty: 'easy',
+            operation: 'multiplication',
+            currentQuestion: 0,
+            score: 0,
+            questions: [],
+            answers: [],
+            mistakes: [],
+            startTime: null,
+            timerInterval: null
+        };
+
+        // Table State
+        let tableState = {
+            currentOperation: 'mult',
+            selectedTable: null,
+            showingAll: false
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTabs();
+            generateTableSelector();
+            setupTableListeners();
+        });
+
+        // Tab Navigation
+        function initializeTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabName = btn.dataset.tab;
+                    switchTab(tabName);
+                });
+            });
+
+            // Show game tab by default
+            switchTab('game');
+        }
+
+        function switchTab(tabName) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.tab === tabName) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            if (tabName === 'game') {
+                document.getElementById('gameTab').classList.add('active');
+            } else if (tabName === 'tables') {
+                document.getElementById('tablesTab').classList.add('active');
+            }
+        }
+
+        // Generate Table Selector Buttons
+        function generateTableSelector() {
+            const selector = document.getElementById('tableSelector');
+            selector.innerHTML = '';
+
+            for (let i = 2; i <= 20; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'table-number-btn';
+                btn.textContent = i;
+                btn.dataset.table = i;
+                btn.addEventListener('click', () => {
+                    selectTable(i);
+                });
+                selector.appendChild(btn);
+            }
+        }
+
+        function setupTableListeners() {
+            // Operation toggle
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    tableState.currentOperation = btn.dataset.operation;
+                    
+                    if (tableState.selectedTable) {
+                        generateSingleTable(tableState.selectedTable);
+                    } else if (tableState.showingAll) {
+                        generateAllTables();
+                    }
+                });
+            });
+
+            // Show all button
+            document.getElementById('showAllBtn').addEventListener('click', () => {
+                tableState.showingAll = !tableState.showingAll;
+                const btn = document.getElementById('showAllBtn');
+                
+                if (tableState.showingAll) {
+                    btn.textContent = 'Show Table Selector';
+                    document.getElementById('tableSelector').style.display = 'none';
+                    document.getElementById('tablesContainer').style.display = 'none';
+                    document.getElementById('allTablesView').classList.add('active');
+                    generateAllTables();
+                } else {
+                    btn.textContent = 'Show All Tables (2-20)';
+                    document.getElementById('tableSelector').style.display = 'flex';
+                    document.getElementById('tablesContainer').style.display = 'block';
+                    document.getElementById('allTablesView').classList.remove('active');
+                }
+            });
+        }
+
+        function selectTable(number) {
+            tableState.selectedTable = number;
+            tableState.showingAll = false;
+            
+            // Update button states
+            document.querySelectorAll('.table-number-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                if (parseInt(btn.dataset.table) === number) {
+                    btn.classList.add('selected');
+                }
+            });
+
+            generateSingleTable(number);
+        }
+
+        function generateSingleTable(number) {
+            const container = document.getElementById('tablesContainer');
+            const isMult = tableState.currentOperation === 'mult';
+            const symbol = isMult ? '×' : '÷';
+            const title = isMult ? 'Multiplication' : 'Division';
+
+            let html = `<div class="math-table">
+                <h3>${title} Table of ${number}</h3>
+                <div class="table-grid">`;
+
+            for (let i = 1; i <= 20; i++) {
+                let equation, result;
+                if (isMult) {
+                    equation = `${number} ${symbol} ${i}`;
+                    result = number * i;
+                } else {
+                    const dividend = number * i;
+                    equation = `${dividend} ${symbol} ${number}`;
+                    result = i;
+                }
+
+                html += `<div class="table-row">
+                    <span class="equation">${equation} = </span>
+                    <span class="result">${result}</span>
+                </div>`;
+            }
+
+            html += `</div></div>`;
+            container.innerHTML = html;
+        }
+
+        function generateAllTables() {
+            const container = document.getElementById('allTablesView');
+            const isMult = tableState.currentOperation === 'mult';
+            const symbol = isMult ? '×' : '÷';
+            const title = isMult ? 'Multiplication' : 'Division';
+
+            let html = `<h2 style="text-align: center; color: #667eea; margin-bottom: 20px;">All ${title} Tables (2-20)</h2>`;
+
+            for (let num = 2; num <= 20; num++) {
+                html += `<div class="math-table">
+                    <h3>${title} Table of ${num}</h3>
+                    <div class="table-grid">`;
+
+                for (let i = 1; i <= 20; i++) {
+                    let equation, result;
+                    if (isMult) {
+                        equation = `${num} ${symbol} ${i}`;
+                        result = num * i;
+                    } else {
+                        const dividend = num * i;
+                        equation = `${dividend} ${symbol} ${num}`;
+                        result = i;
+                    }
+
+                    html += `<div class="table-row">
+                        <span class="equation">${equation} = </span>
+                        <span class="result">${result}</span>
+                    </div>`;
+                }
+
+                html += `</div></div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Difficulty ranges
+        const difficultyRanges = {
+            easy: { min: 1, max: 10 },
+            medium: { min: 1, max: 15 },
+            hard: { min: 1, max: 20 }
+        };
+
+        // Setup event listeners
+        document.querySelectorAll('.difficulty-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                gameState.difficulty = btn.dataset.difficulty;
+            });
+        });
+
+        document.querySelectorAll('.operation-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.operation-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                gameState.operation = btn.dataset.operation;
+            });
+        });
+
+        document.querySelector('.start-btn').addEventListener('click', startGame);
+        document.getElementById('submitBtn').addEventListener('click', submitAnswer);
+        document.getElementById('answerInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') submitAnswer();
+        });
+        document.getElementById('retryBtn').addEventListener('click', () => {
+            startGame();
+        });
+        document.getElementById('newChallengeBtn').addEventListener('click', () => {
+            showScreen('setup');
+        });
+
+        function showScreen(screen) {
+            document.querySelectorAll('.setup-screen, .game-screen, .results-screen').forEach(s => {
+                s.classList.remove('active');
+            });
+            document.querySelector(`.${screen}-screen`).classList.add('active');
+        }
+
+        function generateQuestions() {
+            const questions = [];
+            const range = difficultyRanges[gameState.difficulty];
+            
+            for (let i = 0; i < 10; i++) {
+                let num1 = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+                let num2 = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+                
+                let operation = gameState.operation;
+                if (operation === 'mixed') {
+                    operation = Math.random() < 0.5 ? 'multiplication' : 'division';
+                }
+                
+                if (operation === 'division') {
+                    // For division, ensure clean division (no remainders)
+                    const product = num1 * num2;
+                    questions.push({
+                        num1: product,
+                        num2: num2,
+                        operation: 'division',
+                        answer: num1
+                    });
+                } else {
+                    questions.push({
+                        num1: num1,
+                        num2: num2,
+                        operation: 'multiplication',
+                        answer: num1 * num2
+                    });
+                }
+            }
+            
+            return questions;
+        }
+
+        function startGame() {
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            gameState.questions = generateQuestions();
+            gameState.answers = [];
+            gameState.mistakes = [];
+            gameState.startTime = Date.now();
+            
+            showScreen('game');
+            startTimer();
+            displayQuestion();
+        }
+
+        function startTimer() {
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+            
+            gameState.timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+                document.getElementById('timer').textContent = elapsed + 's';
+            }, 1000);
+        }
+
+        function displayQuestion() {
+            const question = gameState.questions[gameState.currentQuestion];
+            const symbol = question.operation === 'multiplication' ? '×' : '÷';
+            
+            document.getElementById('questionText').textContent = 
+                `${question.num1} ${symbol} ${question.num2} = ?`;
+            document.getElementById('questionNumber').textContent = 
+                `${gameState.currentQuestion + 1}/10`;
+            document.getElementById('currentScore').textContent = gameState.score;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('answerInput').focus();
+            
+            // Update progress bar
+            const progress = ((gameState.currentQuestion) / 10) * 100;
+            document.querySelector('.progress-fill').style.width = progress + '%';
+        }
+
+        function submitAnswer() {
+            const userAnswer = parseInt(document.getElementById('answerInput').value);
+            const question = gameState.questions[gameState.currentQuestion];
+            const feedback = document.getElementById('feedback');
+            
+            if (isNaN(userAnswer)) {
+                feedback.textContent = 'Please enter a number!';
+                feedback.className = 'feedback incorrect';
+                return;
+            }
+            
+            const isCorrect = userAnswer === question.answer;
+            
+            gameState.answers.push({
+                question: question,
+                userAnswer: userAnswer,
+                correct: isCorrect
+            });
+            
+            if (isCorrect) {
+                gameState.score++;
+                feedback.textContent = '✓ Correct! Well done!';
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = `✗ Incorrect. The answer is ${question.answer}`;
+                feedback.className = 'feedback incorrect';
+                gameState.mistakes.push({
+                    question: question,
+                    userAnswer: userAnswer
+                });
+            }
+            
+            document.getElementById('currentScore').textContent = gameState.score;
+            
+            setTimeout(() => {
+                gameState.currentQuestion++;
+                if (gameState.currentQuestion < 10) {
+                    displayQuestion();
+                } else {
+                    endGame();
+                }
+            }, 1500);
+        }
+
+        function endGame() {
+            clearInterval(gameState.timerInterval);
+            const totalTime = Math.floor((Date.now() - gameState.startTime) / 1000);
+            
+            showScreen('results');
+            
+            document.getElementById('finalScore').textContent = `${gameState.score}/10`;
+            document.getElementById('timeDisplay').textContent = `Completed in ${totalTime} seconds`;
+            
+            // Performance badge
+            const badge = document.getElementById('performanceBadge');
+            if (gameState.score >= 9) {
+                badge.textContent = '🌟 Excellent! Math Master!';
+                badge.className = 'performance-badge badge-excellent';
+            } else if (gameState.score >= 7) {
+                badge.textContent = '👍 Good Job! Keep Practicing!';
+                badge.className = 'performance-badge badge-good';
+            } else {
+                badge.textContent = '📚 Needs Practice - You Can Do It!';
+                badge.className = 'performance-badge badge-needs-practice';
+            }
+            
+            // Show mistakes if any
+            if (gameState.mistakes.length > 0) {
+                document.getElementById('mistakeReview').style.display = 'block';
+                const mistakesList = document.getElementById('mistakesList');
+                mistakesList.innerHTML = '';
+                
+                gameState.mistakes.forEach((mistake, index) => {
+                    const symbol = mistake.question.operation === 'multiplication' ? '×' : '÷';
+                    const div = document.createElement('div');
+                    div.className = 'mistake-item';
+                    div.innerHTML = `
+                        <strong>${mistake.question.num1} ${symbol} ${mistake.question.num2} = ?</strong><br>
+                        Your answer: ${mistake.userAnswer} | Correct answer: ${mistake.question.answer}
+                    `;
+                    mistakesList.appendChild(div);
+                });
+            } else {
+                document.getElementById('mistakeReview').style.display = 'none';
+            }
+            
+            // Generate improvements
+            generateImprovements();
+        }
+
+        function generateImprovements() {
+            const improvements = [];
+            const avgTime = Math.floor((Date.now() - gameState.startTime) / 10000);
+            
+            if (gameState.score < 7) {
+                improvements.push('Practice times tables daily - spend 10-15 minutes each day');
+                improvements.push('Use flashcards to memorize difficult combinations');
+                improvements.push('Try the "skip counting" technique (2, 4, 6, 8...)');
+            }
+            
+            if (gameState.score >= 7 && gameState.score < 9) {
+                improvements.push('Great progress! Focus on the questions you got wrong');
+                improvements.push('Try the next difficulty level once you master this one');
+                improvements.push('Practice with timed drills to improve speed');
+            }
+            
+            if (gameState.score >= 9) {
+                improvements.push('Outstanding! Challenge yourself with harder difficulty');
+                improvements.push('Try mixed operations to master both multiplication and division');
+                improvements.push('Help others learn - teaching reinforces your knowledge');
+            }
+            
+            if (avgTime > 4) {
+                improvements.push('Work on speed - try to answer each question in under 3 seconds');
+                improvements.push('Practice mental math to calculate faster');
+            }
+            
+            if (gameState.operation === 'division' && gameState.mistakes.length > 2) {
+                improvements.push('Remember: Division is the opposite of multiplication');
+                improvements.push('Practice division by thinking: "What times this equals that?"');
+            }
+            
+            if (gameState.mistakes.some(m => m.question.num1 > 10 || m.question.num2 > 10)) {
+                improvements.push('Break down larger numbers: 12 × 7 = (10 × 7) + (2 × 7)');
+            }
+            
+            improvements.push('Keep practicing daily - consistency is key to mastery!');
+            
+            const list = document.getElementById('improvementsList');
+            list.innerHTML = '';
+            improvements.forEach(tip => {
+                const li = document.createElement('li');
+                li.textContent = tip;
+                list.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
